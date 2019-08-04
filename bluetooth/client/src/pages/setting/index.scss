@@ -1,0 +1,115 @@
+.index {
+  background-color: rgba(239, 239, 244, 1);
+  min-height: 100vh;
+  padding-bottom: 40rpx;
+  .color-lite-blue {
+    color: #50b7f4
+  }
+  .block {
+    margin-bottom: 20rpx;
+    padding: 0 20rpx;
+    background-color: #fff;
+  }
+  .normal {
+    height: 86rpx;
+    line-height: 86rpx;
+    .block-label {
+      display: block;
+      float: left;
+      height: 86rpx;
+      line-height: 86rpx;
+    }
+    .block-value {
+      display: block;
+      float: right;
+      height: 86rpx;
+      line-height: 86rpx;
+    }
+    .normal-icon {
+      height: 86rpx;
+      line-height: 86rpx;
+    }
+    .block-switch {
+      margin: 0!important;
+      padding: 0!important;
+      .at-switch__title {
+        font-size: 30rpx!important;
+      }
+    }
+    .block-picker {
+      display: block;
+      float: right;
+    }
+  }
+  .icon {
+    color: #c9c9c9;
+    float: right;
+  }
+  // 进度展示
+  .speed {
+    background-color: rgba(239, 239, 244, 1);
+    padding: 60rpx 0;
+    width: 100%;
+    .block-label {
+      display: block;
+      height: 86rpx;
+      line-height: 86rpx;
+      padding-left: 20rpx;
+    }
+    .speed-wrapper {
+      height: 10rpx;
+      position: relative;
+      width: 660rpx;
+      margin: 0 auto;
+      border-radius: 10rpx;
+      background-color: #e5e5e5;
+      z-index: 90;
+    }
+    .speed-line {
+      height: 10rpx;
+      position: absolute;
+      left: 0;
+      top: 0;
+      border-radius: 10rpx;
+      background-color: #3388ff;
+      z-index: 100;
+    }
+    .speed-word {
+      width: 80rpx;
+      height: 30rpx;
+      position: absolute;
+      top: -10rpx;
+      z-index: 110;
+      text-align: center;
+      line-height: 30rpx;
+      font-size: 20rpx;
+      border-radius: 10rpx;
+      background-color: #3388ff;
+      color: #fff;
+    }
+  }
+  // 时间展示
+  .time {
+    font-weight: bold;
+    height: 144rpx;
+    line-height: 144rpx;
+    font-size: 72rpx;
+    .time-icon {
+      height: 144rpx;
+      line-height: 144rpx;
+    }
+  }
+  .time-modal {
+    .at-modal__content {
+      padding: 0!important;
+    }
+    .time-button {
+      width: 100%;
+    }
+  }
+  // 删除按钮
+  .del-button {
+    width: 700rpx;
+    margin: 0 auto;
+  }
+}

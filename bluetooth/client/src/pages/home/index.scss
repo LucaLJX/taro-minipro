@@ -1,0 +1,52 @@
+.index {
+  padding: 28rpx;
+}
+.button {
+  width: 100%;
+  background-color: #fff;
+}
+.device {
+  height: 154rpx;
+  border-radius: 8rpx;
+  margin-bottom: 28rpx;
+  box-shadow: 0rpx 0rpx 4rpx #aaa;
+  display: flex;
+  flex-direction: row;
+  background-color: #fff;
+  .device-left {
+    width: 146rpx;
+    padding: 20rpx;
+  }
+  .device-middle {
+    flex: 1;
+    padding: 20rpx;
+    .name {
+      width: 100%;
+      height: 48rpx;
+      display: block;
+      font-size: 28rpx;
+    }
+    .time {
+      width: 100%;
+      height: 66rpx;
+      line-height: 66rpx;
+      display: block;
+      font-size: 48rpx;
+      color: #ff9800;
+    }
+  }
+  .device-right {
+    width: 100rpx;
+    padding: 20rpx;
+    .icon {
+      height: 48rpx;
+      display: block;
+    }
+    .type {
+      font-size: 28rpx;
+      height: 66rpx;
+      line-height: 66rpx;
+    }
+  }
+}
+

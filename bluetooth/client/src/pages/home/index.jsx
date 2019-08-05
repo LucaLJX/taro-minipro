@@ -1,7 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Image, Button } from '@tarojs/components'
 import './index.scss'
-import { AtNoticebar } from 'taro-ui'
 
 import Login from '../../components/login/index'
 

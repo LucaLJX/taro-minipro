@@ -3,7 +3,10 @@
   min-height: 100vh;
   padding-bottom: 40rpx;
   .color-lite-blue {
-    color: #50b7f4
+    color: #50b7f4;
+    .van-button {
+      color: #50b7f4;
+    }
   }
   .block {
     margin-bottom: 20rpx;
@@ -24,21 +27,30 @@
       float: right;
       height: 86rpx;
       line-height: 86rpx;
+      min-width: 120rpx;
+      text-align: right;
     }
     .normal-icon {
       height: 86rpx;
-      line-height: 86rpx;
+      .van-icon {
+        line-height: 86rpx;
+      }
     }
     .block-switch {
-      margin: 0!important;
-      padding: 0!important;
-      .at-switch__title {
-        font-size: 30rpx!important;
+      float: right;
+      height: 86rpx;
+      .van-switch {
+        margin-top: 11rpx;
       }
     }
     .block-picker {
       display: block;
       float: right;
+      .picker {
+        min-width: 100rpx;
+        height: 86rpx;
+        text-align: right;
+      }
     }
   }
   .icon {
@@ -96,7 +108,9 @@
     font-size: 72rpx;
     .time-icon {
       height: 144rpx;
-      line-height: 144rpx;
+      .van-icon {
+        line-height: 144rpx;
+      }
     }
   }
   .time-modal {
@@ -104,7 +118,11 @@
       padding: 0!important;
     }
     .time-button {
+      display: block;
       width: 100%;
+      .van-button {
+        display: block;
+      }
     }
   }
   // 删除按钮

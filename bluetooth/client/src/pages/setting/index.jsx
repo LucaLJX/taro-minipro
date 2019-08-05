@@ -1,16 +1,46 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Image, Button, Switch, Picker } from '@tarojs/components'
 import './index.scss'
-import {
-  AtIcon,
-  AtModal,
-  AtModalHeader,
-  AtModalContent,
-  AtModalAction,
-  AtSwitch
-} from 'taro-ui'
-
 import Login from '../../components/login/index'
+
+const deviceData = {
+  'ARRI': [
+    'ALEXA LF',
+    'ALEXA MINI',
+    'ALEXA SXT',
+    'AMIRA'
+  ],
+  'RED': [
+    'Dragon-X',
+    'GEMINI 5K',
+    'HELIUM 8K'
+  ],
+  'SONY': [
+    'F55',
+    'FS7',
+    'F65',
+    'EX280',
+    'A7'
+  ],
+  'BMD': [
+    'BMPCC',
+    'BMCC',
+    'URSA MINI PRO'
+  ],
+  'SOUND DEVICES': [
+    '6 SERIES',
+    '7 SERIES',
+    'SCORPIO'
+  ],
+  'ZOOM': [
+    'F8',
+    'F4'
+  ],
+  'ROLAND': [
+    'R88',
+    'R4 PRO'
+  ]
+}
 
 export default class Index extends Component {
 
@@ -18,12 +48,43 @@ export default class Index extends Component {
     timeModalVisible: false,
     switchChecked: false,
     speed: 55,
+    // 帧率
+    fpsSelector: [
+      '23.98',
+      '24',
+      '25',
+      '29.97nd',
+      '29.97df'
+    ],
+    fpsChecked: '',
+    showFps: false,
+    // 设备
+    deviceSelector: [
+      {
+        values: Object.keys(deviceData),
+        className: 'column1'
+      },
+      {
+        values: deviceData['ARRI'],
+        className: 'column2',
+      }
+    ],
+    deviceChecked: '',
+    showDevice: false,
     selector: ['美国', '中国', '巴西', '日本'],
     selectorChecked: '美国',
   }
 
   config = {
-    navigationBarTitleText: '设置'
+    navigationBarTitleText: '设置',
+    usingComponents: {
+      'van-button': '../../components/vant/button/index',
+      'van-picker': '../../components/vant/picker/index',
+      'van-popup': '../../components/vant/popup/index',
+      'van-dialog': '../../components/vant/dialog/index',
+      'van-switch': '../../components/vant/switch/index',
+      'van-icon': '../../components/vant/icon/index'
+    },
   }
 
   componentWillMount () { }
@@ -37,6 +98,7 @@ export default class Index extends Component {
   componentDidHide () { }
 
   clickTime () {
+    console.log('time show')
     this.setState({
       timeModalVisible: true
     })
@@ -47,11 +109,54 @@ export default class Index extends Component {
     return width + 'rpx'
   }
 
+  showFps () {
+    this.setState({
+      showFps: true
+    })
+  }
+
+  colseFps () {
+    this.setState({
+      showFps: false
+    })
+  }
+
+  confirmFps (e) {
+    this.setState({
+      fpsChecked: e.detail.value,
+      showFps: false
+    })
+  }
+
+  showDevice () {
+    this.setState({
+      showDevice: true
+    })
+  }
+
+  colseDevice () {
+    this.setState({
+      showDevice: false
+    })
+  }
+
+  changeDeviceColumn (e) {
+    const { picker, value, index } = e.detail
+    picker.setColumnValues(1, deviceData[value[0]])
+  }
+
+  confirmDevice (e) {
+    this.setState({
+      deviceChecked: `${e.detail.value[0]} ${e.detail.value[1]}`,
+      showDevice: false
+    })
+  }
+
   getWordPosition () {
     // 文字所在的位置 - 文字的宽度
     const wordWidth = 80
     const position = this.state.speed / 100 * 660
-    return (position - 80 / 2) + 'rpx'
+    return (position - wordWidth / 2) + 'rpx'
   }
 
   render () {
@@ -60,47 +165,72 @@ export default class Index extends Component {
         {/* 时间 */}
         <View className='block time' onClick={() => this.clickTime()}>
           <Text>08:36:34:15</Text>
-          <AtIcon className='icon time-icon' value='chevron-right' size='20'></AtIcon>
+          <van-icon class='icon time-icon' size='20px' name='arrow' />
+          {/* <AtIcon className='icon time-icon' value='chevron-right' size='20'></AtIcon> */}
         </View>
-        <AtModal className='time-modal' isOpened={this.state.timeModalVisible}>
-          <AtModalContent>
-            <Button className='time-button'>从零开始</Button>
-            <Button className='time-button color-lite-blue'>同步 RTC</Button>
-          </AtModalContent>
-        </AtModal>
+        <van-dialog
+          class='time-modal'
+          use-slot
+          closeOnClickOverlay={true}
+          show-confirm-button={false}
+          show-cancel-button={false}
+          show={this.state.timeModalVisible}
+          confirm-button-open-type="getUserInfo"
+          onClose={() => this.setState({
+            timeModalVisible: false
+          })}
+        >
+          <van-button class='time-button'>从零开始</van-button>
+          <van-button class='time-button color-lite-blue'>同步 RTC</van-button>
+        </van-dialog>
         {/* 名称 */}
         <View className='block normal'>
           <Text className='block-label'>名称</Text>
           <Text className='block-value'>A机</Text>
         </View>
-        {/* 帧率 */}
+        {/* 帧率  vant */}
         <View className='block normal'>
           <Text className='block-label'>帧率</Text>
-          <AtIcon className='icon normal-icon' value='chevron-right' size='20'></AtIcon>
-          <View className='block-picker'>
-            <Picker mode='selector' range={this.state.selector} onChange={this.onChange}>
-              <View className='picker'>
-                25P
-              </View>
-            </Picker>
-          </View>
+          <van-icon class='icon normal-icon' size='20px' name='arrow' />
+          <Text className='block-value' onClick={() => this.showFps()}>{ this.state.fpsChecked }</Text>
+          <van-popup
+            show={this.state.showFps}
+            position={'bottom'}
+            onClose={() => this.colseFps()}
+          >
+            <van-picker
+              onCancel={() => this.colseFps()}
+              onConfirm={(e) => this.confirmFps(e)}
+              show-toolbar
+              title='帧率'
+              columns={this.state.fpsSelector}
+            />
+          </van-popup>
         </View>
         {/* 设备型号 */}
         <View className='block normal'>
           <Text className='block-label'>设备型号</Text>
-          <AtIcon className='icon normal-icon' value='chevron-right' size='20'></AtIcon>
-          <View className='block-picker'>
-            <Picker mode='selector' range={this.state.selector} onChange={this.onChange}>
-              <View className='picker'>
-                ARRI MINI
-              </View>
-            </Picker>
-          </View>
+          <van-icon class='icon normal-icon' size='20px' name='arrow' />
+          <Text className='block-value' onClick={() => this.showDevice()}>{ this.state.deviceChecked }</Text>
+          <van-popup
+            show={this.state.showDevice}
+            position={'bottom'}
+            onClose={() => this.colseDevice()}
+          >
+            <van-picker
+              onChange={(e) => this.changeDeviceColumn(e)}
+              onCancel={() => this.colseDevice()}
+              onConfirm={(e) => this.confirmDevice(e)}
+              show-toolbar
+              title='设备型号'
+              columns={this.state.deviceSelector}
+            />
+          </van-popup>
         </View>
         {/* RTC */}
         <View className='block normal'>
           <Text className='block-label'>RTC</Text>
-          <AtIcon className='icon normal-icon' value='chevron-right' size='20'></AtIcon>
+          <van-icon class='icon normal-icon' size='20px' name='arrow' />
           <View className='block-picker'>
             <Picker mode='selector' range={this.state.selector} onChange={this.onChange}>
               <View className='picker'>
@@ -112,7 +242,7 @@ export default class Index extends Component {
         {/* USER BITS */}
         <View className='block normal'>
           <Text className='block-label'>USER BITS</Text>
-          <AtIcon className='icon normal-icon' value='chevron-right' size='20'></AtIcon>
+          <van-icon class='icon normal-icon' size='20px' name='arrow' />
           <View className='block-picker'>
             <Picker mode='selector' range={this.state.selector} onChange={this.onChange}>
               <View className='picker'>
@@ -123,7 +253,10 @@ export default class Index extends Component {
         </View>
         {/* 单反模式 */}
         <View className='block normal'>
-          <AtSwitch className='block-switch' title='单反模式' checked={this.state.value} onChange={this.handleChange} />
+          <Text className='block-label'>单反模式</Text>
+          <van-switch class='block-switch' checked={this.switchChecked} onChange={(e) => this.setState({
+            switchChecked: e.detail
+          })} />
         </View>
         {/* 信号输出 */}
         <View className='block speed'>
@@ -145,7 +278,7 @@ export default class Index extends Component {
         {/* 固件 */}
         <View className='block normal'>
           <Text className='block-label'>固件</Text>
-          <AtIcon className='icon normal-icon' value='chevron-right' size='20'></AtIcon>
+          <van-icon class='icon normal-icon' size='20px' name='arrow' />
           <View className='block-picker'>
             <Picker mode='selector' range={this.state.selector} onChange={this.onChange}>
               <View className='picker'>
@@ -156,6 +289,7 @@ export default class Index extends Component {
         </View>
         {/* 删除按钮 */}
         <Button className='del-button' type='warn'>删除设备</Button>
+        
       </View>
     )
   }

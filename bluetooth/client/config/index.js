@@ -28,6 +28,10 @@ const config = {
   },
   copy: {
     patterns: [
+      {
+        from: 'src/components/vant/',
+        to: 'dist/components/vant/'
+      }
     ],
     options: {
     }
@@ -48,7 +52,9 @@ const config = {
         pxtransform: {
           enable: true,
           config: {
-
+            selectorBlackList: [
+              /^.van-.*?$/
+            ]
           }
         },
         url: {

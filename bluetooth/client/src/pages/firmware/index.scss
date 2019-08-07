@@ -1,0 +1,86 @@
+.index {
+  background-color: #fff;
+  min-height: 100vh;
+  
+  .head-img {
+    width: 144rpx;
+    height: 132rpx;
+    margin: 74rpx auto 0 auto;
+  }
+
+  .head-title {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 28rpx;
+    color: #101010;
+    line-height: 40rpx;
+    height: 40rpx;
+    margin-top: 40rpx;
+  }
+
+  .content {
+    width: 100%;
+    border-top: 1px solid #e8e8e8;
+    margin-top: 162rpx;
+
+    .line {
+      border-bottom: 1px solid #e8e8e8;
+      display: flex;
+      flex-direction: row;
+      padding: 0 34rpx;
+      font-size: 28rpx;
+      height: 80rpx;
+      line-height: 80rpx;
+
+      .line-label {
+        width: 50%;
+        text-align: left;
+      }
+
+      .line-value {
+        width: 50%;
+        text-align: right;
+      }
+    }
+  }
+
+  .dialog {
+    width: 500rpx;
+
+    .dialog-index--van-dialog__confirm {
+      color: #ff6363!important;
+    }
+    
+    .dialog-title {
+      margin-top: 40rpx;
+      height: 80rpx;
+      text-align: center;
+      position: relative;
+
+      .title-img {
+        position: absolute;
+        left: 200rpx;
+        top: 20rpx;
+        width: 38rpx;
+        height: 38rpx;
+        line-height: 80rpx;
+      }
+
+      .title-word {
+        line-height: 80rpx;
+        height: 80rpx;
+      }
+    }
+
+    .dialog-content {
+      text-align: center;
+
+      .content-word {
+        width: 100%;
+        font-size: 28rpx;
+        color: #969696;
+      }
+    }
+  }
+}

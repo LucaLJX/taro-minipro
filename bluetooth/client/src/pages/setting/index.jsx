@@ -4,6 +4,9 @@ import './index.scss'
 import Login from '../../components/login/index'
 
 const deviceData = {
+  '无': [
+    '无'
+  ],
   'ARRI': [
     'ALEXA LF',
     'ALEXA MINI',
@@ -65,12 +68,22 @@ export default class Index extends Component {
         className: 'column1'
       },
       {
-        values: deviceData['ARRI'],
+        values: deviceData['无'],
         className: 'column2',
       }
     ],
     deviceChecked: '',
     showDevice: false,
+    // user bits
+    userSelector: [
+      '无',
+      'DD-MM-YY',
+      'YY-MM-DD',
+      'DD-MM-YYY',
+      'MM-DD-YYY'
+    ],
+    userChecked: '',
+    showUser: false,
     selector: ['美国', '中国', '巴西', '日本'],
     selectorChecked: '美国',
   }
@@ -83,7 +96,8 @@ export default class Index extends Component {
       'van-popup': '../../components/vant/popup/index',
       'van-dialog': '../../components/vant/dialog/index',
       'van-switch': '../../components/vant/switch/index',
-      'van-icon': '../../components/vant/icon/index'
+      'van-icon': '../../components/vant/icon/index',
+      'van-slider': '../../components/vant/slider/index'
     },
   }
 
@@ -104,11 +118,7 @@ export default class Index extends Component {
     })
   }
 
-  getSpeedWidth () {
-    const width = this.state.speed / 100 * 660
-    return width + 'rpx'
-  }
-
+  // 帧率相关
   showFps () {
     this.setState({
       showFps: true
@@ -128,6 +138,7 @@ export default class Index extends Component {
     })
   }
 
+  // 设备相关
   showDevice () {
     this.setState({
       showDevice: true
@@ -146,17 +157,53 @@ export default class Index extends Component {
   }
 
   confirmDevice (e) {
+    if (e.detail.value[0] === '无') {
+      return this.setState({
+        deviceChecked: '无',
+        showDevice: false
+      })
+    }
     this.setState({
       deviceChecked: `${e.detail.value[0]} ${e.detail.value[1]}`,
       showDevice: false
     })
   }
 
-  getWordPosition () {
-    // 文字所在的位置 - 文字的宽度
-    const wordWidth = 80
-    const position = this.state.speed / 100 * 660
-    return (position - wordWidth / 2) + 'rpx'
+  // user bits 相关
+  showUser () {
+    this.setState({
+      showUser: true
+    })
+  }
+
+  colseUser () {
+    this.setState({
+      showUser: false
+    })
+  }
+
+  confirmUser (e) {
+    this.setState({
+      userChecked: e.detail.value,
+      showUser: false
+    })
+  }
+
+  // 拖动进度条
+  drag (e) {
+    this.setState({
+      speed: e.detail.value
+    })
+  }
+
+  // 跳转到固件页面
+  toFirmware () {
+    const env = Taro.getEnv()
+    if (env === Taro.ENV_TYPE.WEAPP) {
+      Taro.navigateTo({
+        url: '/pages/firmware/index',
+      })
+    }
   }
 
   render () {
@@ -243,13 +290,20 @@ export default class Index extends Component {
         <View className='block normal'>
           <Text className='block-label'>USER BITS</Text>
           <van-icon class='icon normal-icon' size='20px' name='arrow' />
-          <View className='block-picker'>
-            <Picker mode='selector' range={this.state.selector} onChange={this.onChange}>
-              <View className='picker'>
-              16.05.18.00
-              </View>
-            </Picker>
-          </View>
+          <Text className='block-value' onClick={() => this.showUser()}>{ this.state.userChecked }</Text>
+          <van-popup
+            show={this.state.showUser}
+            position={'bottom'}
+            onClose={() => this.colseUser()}
+          >
+            <van-picker
+              onCancel={() => this.colseUser()}
+              onConfirm={(e) => this.confirmUser(e)}
+              show-toolbar
+              title='USER BITS'
+              columns={this.state.userSelector}
+            />
+          </van-popup>
         </View>
         {/* 单反模式 */}
         <View className='block normal'>
@@ -262,12 +316,16 @@ export default class Index extends Component {
         <View className='block speed'>
           <Text className='block-label'>信号输出</Text>
           <View className='speed-wrapper'>
-            <View className='speed-line' style={{
-              width: this.getSpeedWidth()
-            }}></View>
-            <View className='speed-word' style={{
-              left: this.getWordPosition()
-            }}>{ this.state.speed }%</View>
+            <van-slider
+              bar-height={'4px'}
+              value={this.state.speed}
+              use-button-slot
+              onDrag={(e) => this.drag(e)}
+            >
+              <view class='speed-word' slot="button">
+                { this.state.speed }%
+              </view>
+            </van-slider>
           </View>
         </View>
         {/* 电量 */}
@@ -279,13 +337,7 @@ export default class Index extends Component {
         <View className='block normal'>
           <Text className='block-label'>固件</Text>
           <van-icon class='icon normal-icon' size='20px' name='arrow' />
-          <View className='block-picker'>
-            <Picker mode='selector' range={this.state.selector} onChange={this.onChange}>
-              <View className='picker'>
-                V1.02
-              </View>
-            </Picker>
-          </View>
+          <Text className='block-value' onClick={() => this.toFirmware()}>V1.02</Text>
         </View>
         {/* 删除按钮 */}
         <Button className='del-button' type='warn'>删除设备</Button>

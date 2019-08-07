@@ -230,6 +230,24 @@ export default class Index extends Component {
           <van-button class='time-button'>从零开始</van-button>
           <van-button class='time-button color-lite-blue'>同步 RTC</van-button>
         </van-dialog>
+        {/* 信号输出 */}
+        <View className='speed'>
+          <View className='speed-wrapper'>
+            <Text className='speed-label'>信号输出</Text>
+            <View class='speed-bar'>
+              <van-slider
+                bar-height={'3px'}
+                value={this.state.speed}
+                use-button-slot
+                onDrag={(e) => this.drag(e)}
+              >
+                <view class='speed-word' slot="button">
+                  { this.state.speed }%
+                </view>
+              </van-slider>
+            </View>
+          </View>
+        </View>
         {/* 名称 */}
         <View className='block normal'>
           <Text className='block-label'>名称</Text>
@@ -306,27 +324,11 @@ export default class Index extends Component {
           </van-popup>
         </View>
         {/* 单反模式 */}
-        <View className='block normal'>
+        <View className='block normal bottom-40'>
           <Text className='block-label'>单反模式</Text>
           <van-switch class='block-switch' checked={this.switchChecked} onChange={(e) => this.setState({
             switchChecked: e.detail
           })} />
-        </View>
-        {/* 信号输出 */}
-        <View className='block speed'>
-          <Text className='block-label'>信号输出</Text>
-          <View className='speed-wrapper'>
-            <van-slider
-              bar-height={'4px'}
-              value={this.state.speed}
-              use-button-slot
-              onDrag={(e) => this.drag(e)}
-            >
-              <view class='speed-word' slot="button">
-                { this.state.speed }%
-              </view>
-            </van-slider>
-          </View>
         </View>
         {/* 电量 */}
         <View className='block normal'>
@@ -340,8 +342,7 @@ export default class Index extends Component {
           <Text className='block-value' onClick={() => this.toFirmware()}>V1.02</Text>
         </View>
         {/* 删除按钮 */}
-        <Button className='del-button' type='warn'>删除设备</Button>
-        
+        <Button className='del-button' type='default'>删除设备</Button>
       </View>
     )
   }

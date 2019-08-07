@@ -2,6 +2,9 @@
   background-color: rgba(239, 239, 244, 1);
   min-height: 100vh;
   padding-bottom: 40rpx;
+  .bottom-40 {
+    margin-bottom: 40rpx;
+  }
   .color-lite-blue {
     color: #50b7f4;
     .van-button {
@@ -9,13 +12,15 @@
     }
   }
   .block {
-    margin-bottom: 20rpx;
-    padding: 0 20rpx;
+    padding: 0 30rpx;
     background-color: #fff;
+    border-top: 2rpx solid #f4f4f4;
   }
   .normal {
     height: 86rpx;
     line-height: 86rpx;
+    font-size: 28rpx;
+    color: #484848;
     .block-label {
       display: block;
       float: left;
@@ -59,18 +64,32 @@
   }
   // 进度展示
   .speed {
-    background-color: rgba(239, 239, 244, 1);
-    padding: 60rpx 0;
+    height: 162rpx;
     width: 100%;
-    .block-label {
-      display: block;
-      height: 86rpx;
-      line-height: 86rpx;
-      padding-left: 20rpx;
-    }
+    position: relative;
+    z-index: 100;
+    background-color: #fff;
     .speed-wrapper {
-      width: 660rpx;
-      margin: 0 auto;
+      background-color: #fff;
+      border-radius: 20rpx;
+      position: absolute;
+      left: 60rpx;
+      top: -10rpx;
+      z-index: 102;
+      box-shadow: 0rpx 0rpx 4rpx #aaa;
+      width: 630rpx;
+      height: 162rpx;
+      .speed-label {
+        display: block;
+        height: 86rpx;
+        line-height: 86rpx;
+        font-size: 24rpx;
+        text-align: center;
+      }
+      .speed-bar {
+        width: 510rpx;
+        margin: 10rpx auto 0 auto;
+      }
     }
     .speed-word {
       padding: 2rpx 12rpx;
@@ -86,14 +105,17 @@
   }
   // 时间展示
   .time {
+    background-color: #333;
     font-weight: bold;
-    height: 144rpx;
-    line-height: 144rpx;
-    font-size: 72rpx;
+    height: 230rpx;
+    line-height: 230rpx;
+    font-size: 104rpx;
+    color: #fff;
     .time-icon {
-      height: 144rpx;
+      margin-top: -16rpx;
+      height: 230rpx;
       .van-icon {
-        line-height: 144rpx;
+        line-height: 230rpx;
       }
     }
   }
@@ -112,6 +134,8 @@
   // 删除按钮
   .del-button {
     width: 700rpx;
-    margin: 0 auto;
+    margin: 40rpx auto;
+    color: #fd5b73;
+    border: 1rpx dotted #fd5b73;
   }
 }

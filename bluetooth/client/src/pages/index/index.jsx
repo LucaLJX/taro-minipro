@@ -96,7 +96,7 @@ export default class Index extends Component {
         {
           this.state.deviceList.map((item, i) => {
             return (
-              <View key={'item' + i} className='device unlink' onClick={() => this.toPage()}>
+              <View key={'item' + i} className='device unlink'>
                 <View className='unlink-model'></View>
                 {/* 图片 */}
                 <View className='device-left'>

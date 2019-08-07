@@ -15,15 +15,15 @@ class App extends Component {
   config = {
     pages: [
       'pages/index/index',
-      'pages/firmware/index',
       'pages/setting/index',
+      'pages/firmware/index',
       'pages/test/index'
     ],
     window: {
       backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
+      navigationBarBackgroundColor: '#61a6ff',
       navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black'
+      navigationBarTextStyle: 'black',
     },
     // cloud: true
   }

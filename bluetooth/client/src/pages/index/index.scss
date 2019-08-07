@@ -1,14 +1,25 @@
 .index {
-  padding: 28rpx;
+  background-color: #efeff4;
 }
-.button {
+.add {
+  height: 78rpx;
   width: 100%;
-  background-color: #fff;
+  background-color: #61a6ff;
+  .add-button {
+    padding-right: 30rpx;
+    display: block;
+    height: 78rpx;
+    line-height: 78rpx;
+    float: right;
+    color: #fff;
+    font-size: 28rpx;
+  }
 }
 .device {
   height: 154rpx;
+  width: 710rpx;
+  margin: 28rpx auto 0 auto;
   border-radius: 8rpx;
-  margin-bottom: 28rpx;
   box-shadow: 0rpx 0rpx 4rpx #aaa;
   display: flex;
   flex-direction: row;
@@ -49,4 +60,91 @@
     }
   }
 }
+.unlink {
+  color: #757575;
+  position: relative;
+  z-index: 100;
+  .device-middle {
+    .time {
+      color: #757575;
+    }
+  }
+  .unlink-model {
+    position: absolute;
+    z-index: 110;
+    height: 154rpx;
+    width: 710rpx;
+    left: 0;
+    top: 0;
+    background: rgba(255, 255, 255, 0.5);
+  }
+}
+.unlink-label {
+  font-size: 24rpx;
+  color: #757575;
+  padding-left: 20rpx;
+  display: block;
+  margin-top: 30rpx;
+}
+// 弹窗
+.dialog-title {
+  background-color: #fff;
+  height: 112rpx;
+  line-height: 112rpx;
+  font-size: 28rpx;
+  padding: 0 56rpx;
+  .title-label {
+    display: block;
+    float: left;
+    height: 112rpx;
+    line-height: 112rpx;
+  }
+  .title-status {
+    color: #5c9adf;
+    display: block;
+    float: right;
+    height: 112rpx;
+    line-height: 112rpx;
+  }
+}
+.dialog-content {
+  height: 662rpx;
+  overflow: scroll;
+  background-color: #ddd;
+}
+.blue-content {
+  width: 100%;
+  height: 60rpx;
+  margin: 40rpx 0;
+  font-size: 28rpx;
+  color: #666;
+  .blue-icon {
+    float: left;
+    width: 40rpx;
+    height: 40rpx;
+    margin: 0 30rpx;
+  }
+  .blue-text {
+    display: block;
+  }
+}
+.dialog-button {
+  .button-left {
+    font-size: 28rpx;
+    float: left;
+    width: 50%;
+    color: #5c9adf;
+    height: 108rpx;
+    line-height: 108rpx;
+  }
+  .button-right {
+    font-size: 28rpx;
+    float: right;
+    width: 50%;
+    color: #101010;
+    height: 108rpx;
+    line-height: 108rpx;
+  }
+}
+
 

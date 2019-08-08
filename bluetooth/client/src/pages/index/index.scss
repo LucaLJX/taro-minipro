@@ -108,9 +108,23 @@
   }
 }
 .dialog-content {
-  height: 662rpx;
+  min-height: 200rpx;
+  max-height: 662rpx;
   overflow: scroll;
   background-color: #ddd;
+}
+.dialog-loading {
+  float: left;
+  margin-top: 70rpx;
+  margin-left: 290rpx;
+}
+.dialog-nodata {
+  font-size: 28rpx;
+  display: block;
+  text-align: center;
+  height: 200rpx;
+  line-height: 200rpx;
+  color: #666;
 }
 .blue-content {
   width: 100%;

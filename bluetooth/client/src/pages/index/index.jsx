@@ -1,8 +1,17 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Image, Button } from '@tarojs/components'
 import './index.scss'
-
 import Login from '../../components/login/index'
+
+const BlueToothItemVo = {
+  deviceId: '',
+  name: '',
+  RSSI: '',
+  advertisData: {},
+  advertisServiceUUIDs: [],
+  localName: '',
+  serviceData: {}
+}
 
 export default class Index extends Component {
 
@@ -10,7 +19,11 @@ export default class Index extends Component {
     deviceList: [1, 3,4 ],
     imgUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564904594165&di=8ad26945435b747fcfad261394c39c63&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201204%2F09%2F20120409153735_imRnV.thumb.700_0.jpeg',
     visible: false,
-    blueToothIcon: require('../../assets/image/steam.png')
+    blueToothIcon: require('../../assets/image/steam.png'),
+    // 蓝牙是否开启
+    blueToothOpen: false,
+    blueToothList: [],
+    searchBlueLoading: false
   }
 
   config = {
@@ -22,13 +35,30 @@ export default class Index extends Component {
       'van-dialog': '../../components/vant/dialog/index',
       'van-switch': '../../components/vant/switch/index',
       'van-icon': '../../components/vant/icon/index',
-      'van-slider': '../../components/vant/slider/index'
+      'van-slider': '../../components/vant/slider/index',
+      'van-loading': '../../components/vant/loading/index'
     },
   }
 
-  componentWillMount () { }
+  // 蓝牙模块必须在初始化的时候就进行启用，因为此小程序是基于蓝牙使用的
+  componentWillMount () {
+    Taro.openBluetoothAdapter()
+    .then(res => {
+      this.setState({
+        blueToothOpen: true
+      })
+    })
+    .catch(err => {
+      Taro.showModal({
+        title: '蓝牙未开启',
+        content: '请打开您的蓝牙设置，然后重启小程序'
+      })
+    })
+  }
 
-  componentDidMount () { }
+  componentDidMount () {
+    console.log()
+  }
 
   componentWillUnmount () { }
 
@@ -36,9 +66,51 @@ export default class Index extends Component {
 
   componentDidHide () { }
 
+  // 开始搜索蓝牙设备
+  bluetoothDevicesDiscovery () {
+    this.setState({
+      blueToothList: [],
+      searchBlueLoading: true
+    })
+    // 开始搜索蓝牙
+    Taro.startBluetoothDevicesDiscovery()
+    .then(res => {
+      setTimeout(() => {
+        this.getBluetoothDevices()
+      }, 2000)
+    })
+    .catch(err => {
+      Taro.showModal({
+        title: '操作失败',
+        content: '搜索蓝牙设备失败，请检查是否开启蓝牙'
+      })
+    })
+  }
+
+  // 获取搜索到的蓝牙设备
+  getBluetoothDevices () {
+    Taro.getBluetoothDevices()
+    .then(res => {
+      this.setState({
+        searchBlueLoading: false,
+        blueToothList: res.devices
+      })
+      this.stopBluetoothDevicesDiscovery()
+    })
+    .catch(err => {
+      Taro.showModal({
+        title: '操作失败',
+        content: '搜索蓝牙设备失败'
+      })
+    })
+  }
+
+  // 停止蓝牙设备搜索
+  stopBluetoothDevicesDiscovery () {
+    Taro.stopBluetoothDevicesDiscovery()
+  }
+
   toPage () {
-    console.log(Taro.getEnv())
-    console.log(Taro.ENV_TYPE)
     const env = Taro.getEnv()
     if (env === Taro.ENV_TYPE.WEAPP) {
       Taro.navigateTo({
@@ -128,11 +200,23 @@ export default class Index extends Component {
         >
           <View className='dialog-title'>
             <Text className='title-label'>蓝牙</Text>
-            <Text className='title-status'>已开启</Text>
+            <Text className='title-status'>
+            {
+              this.state.blueToothOpen ? '已开启' : '未开启'
+            }
+            </Text>
           </View>
           <View className='dialog-content'>
             {
-              this.deviceList.map((item, index) => {
+              this.state.searchBlueLoading &&
+              <van-loading class='dialog-loading' type='spinner' color='#5c9adf' />
+            }
+            {
+              !this.state.searchBlueLoading && this.state.blueToothList.length === 0 &&
+              <Text className='dialog-nodata'>暂无蓝牙设备</Text>
+            }
+            {
+              !this.state.searchBlueLoading && this.state.blueToothList.length !== 0 && this.state.blueToothList.map((item, index) => {
                 return <View className='blue-content' key={index}>
                   <View className='blue-icon'>
                     <Image
@@ -141,14 +225,14 @@ export default class Index extends Component {
                     />
                   </View>
                   <View className='blue-text'>
-                    <Text>已开启</Text>
+                    <Text>{item.name}:{item.deviceId}</Text>
                   </View>
                 </View>
               })
             }
           </View>
           <View className='dialog-button'>
-            <Button className='button-left'>重新扫描</Button>
+            <Button className='button-left' onClick={() => this.bluetoothDevicesDiscovery()}>重新扫描</Button>
             <Button className='button-right' onClick={() => this.closeDialog()}>已完成</Button>
           </View>
         </van-dialog>

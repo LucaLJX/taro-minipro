@@ -84,6 +84,9 @@ export default class Index extends Component {
         title: '操作失败',
         content: '搜索蓝牙设备失败，请检查是否开启蓝牙'
       })
+      this.setState({
+        searchBlueLoading: false
+      })
     })
   }
 
@@ -139,6 +142,8 @@ export default class Index extends Component {
     return (
       <View className='index'>
         <View className='add'>
+          <Text className='add-button' onClick={() => console.log('批量设置')}>批量设置</Text>
+          <Text className='add-button' onClick={() => console.log('一键同步')}>一键同步</Text>
           <Text className='add-button' onClick={() => this.showDialog()}>+ 添加设备</Text>
         </View>
         {

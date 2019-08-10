@@ -6,7 +6,7 @@ import Login from '../../components/login/index'
 export default class Index extends Component {
 
   state = {
-    imgUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564904594165&di=8ad26945435b747fcfad261394c39c63&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201204%2F09%2F20120409153735_imRnV.thumb.700_0.jpeg',
+    imgUrl: require('../../assets/image/device.png'),
     title: 'EASYNC II',
     newUpdate: false,
     upDateVersion: 'V 1.9',

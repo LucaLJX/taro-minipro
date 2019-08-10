@@ -138,4 +138,32 @@
     color: #fd5b73;
     border: 1rpx dotted #fd5b73;
   }
+  // rtc弹窗
+  .dialog {
+    .dialog-index--van-dialog__confirm {
+      color: #fff!important;
+      background-color: #5c9adf!important;
+    }
+  }
+  .dialog-content {
+    font-size: 28rpx;
+    padding: 20rpx 0;
+  }
+  .content {
+    height: 60rpx;
+    line-height: 60rpx;
+    display: block;
+    width: 100%;
+    padding: 0 60rpx;
+  }
+  .content-value {
+    padding-left: 30rpx;
+    font-size: 32rpx;
+  }
+  .phone-text {
+    color: #5c9adf;
+  }
+  .rtc-text {
+    color: #ff9800;
+  }
 }

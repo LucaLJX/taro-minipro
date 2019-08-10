@@ -1,6 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Image, Button, Switch, Picker } from '@tarojs/components'
 import './index.scss'
+import dayjs from 'dayjs'
 import Login from '../../components/login/index'
 
 const deviceData = {
@@ -84,6 +85,10 @@ export default class Index extends Component {
     ],
     userChecked: '',
     showUser: false,
+    // rec
+    phoneValue: 'phoneValue',
+    rtcValue: '',
+    showRtc: false,
     selector: ['美国', '中国', '巴西', '日本'],
     selectorChecked: '美国',
   }
@@ -97,7 +102,8 @@ export default class Index extends Component {
       'van-dialog': '../../components/vant/dialog/index',
       'van-switch': '../../components/vant/switch/index',
       'van-icon': '../../components/vant/icon/index',
-      'van-slider': '../../components/vant/slider/index'
+      'van-slider': '../../components/vant/slider/index',
+      'van-field': '../../components/vant/field/index'
     },
   }
 
@@ -196,6 +202,23 @@ export default class Index extends Component {
     })
   }
 
+  // rtc
+  showRtcClick () {
+    const phoneValue = dayjs().format('YYYY-MM-DD HH:mm:ss')
+    this.setState({
+      phoneValue: phoneValue,
+      showRtc: true
+    })
+  }
+
+  closeDialog () {
+    this.setState({
+      phoneValue: '',
+      rtcValue: '',
+      showRtc: false
+    })
+  }
+
   // 跳转到固件页面
   toFirmware () {
     const env = Taro.getEnv()
@@ -213,7 +236,6 @@ export default class Index extends Component {
         <View className='block time' onClick={() => this.clickTime()}>
           <Text>08:36:34:15</Text>
           <van-icon class='icon time-icon' size='20px' name='arrow' />
-          {/* <AtIcon className='icon time-icon' value='chevron-right' size='20'></AtIcon> */}
         </View>
         <van-dialog
           class='time-modal'
@@ -254,10 +276,12 @@ export default class Index extends Component {
           <Text className='block-value'>A机</Text>
         </View>
         {/* 帧率  vant */}
-        <View className='block normal'>
-          <Text className='block-label'>帧率</Text>
-          <van-icon class='icon normal-icon' size='20px' name='arrow' />
-          <Text className='block-value' onClick={() => this.showFps()}>{ this.state.fpsChecked }</Text>
+        <View className='block'>
+          <View className='normal' onClick={() => this.showFps()}>
+            <Text className='block-label'>帧率</Text>
+            <van-icon class='icon normal-icon' size='20px' name='arrow' />
+            <Text className='block-value'>{ this.state.fpsChecked || '请选择'}</Text>
+          </View>
           <van-popup
             show={this.state.showFps}
             position={'bottom'}
@@ -273,10 +297,12 @@ export default class Index extends Component {
           </van-popup>
         </View>
         {/* 设备型号 */}
-        <View className='block normal'>
-          <Text className='block-label'>设备型号</Text>
-          <van-icon class='icon normal-icon' size='20px' name='arrow' />
-          <Text className='block-value' onClick={() => this.showDevice()}>{ this.state.deviceChecked }</Text>
+        <View className='block'>
+          <View className='normal' onClick={() => this.showDevice()}>
+            <Text className='block-label'>设备型号</Text>
+            <van-icon class='icon normal-icon' size='20px' name='arrow' />
+            <Text className='block-value'>{ this.state.deviceChecked || '请选择' }</Text>
+          </View>
           <van-popup
             show={this.state.showDevice}
             position={'bottom'}
@@ -294,21 +320,20 @@ export default class Index extends Component {
         </View>
         {/* RTC */}
         <View className='block normal'>
-          <Text className='block-label'>RTC</Text>
-          <van-icon class='icon normal-icon' size='20px' name='arrow' />
-          <View className='block-picker'>
-            <Picker mode='selector' range={this.state.selector} onChange={this.onChange}>
-              <View className='picker'>
-                08:36:43 2018-05-16
-              </View>
-            </Picker>
+          <View className='normal' onClick={() => this.showRtcClick()}>
+            <Text className='block-label'>RTC</Text>
+            <van-icon class='icon normal-icon' size='20px' name='arrow' />
+            <Text className='block-value'>{ this.state.deviceChecked || '请同步' }</Text>
           </View>
+         
         </View>
         {/* USER BITS */}
-        <View className='block normal'>
-          <Text className='block-label'>USER BITS</Text>
-          <van-icon class='icon normal-icon' size='20px' name='arrow' />
-          <Text className='block-value' onClick={() => this.showUser()}>{ this.state.userChecked }</Text>
+        <View className='block'>
+          <View className='normal' onClick={() => this.showUser()}>
+            <Text className='block-label'>USER BITS</Text>
+            <van-icon class='icon normal-icon' size='20px' name='arrow' />
+            <Text className='block-value'>{ this.state.userChecked || '请选择' }</Text>
+          </View>
           <van-popup
             show={this.state.showUser}
             position={'bottom'}
@@ -336,13 +361,39 @@ export default class Index extends Component {
           <Text className='block-value'>72% 3.1V</Text>
         </View>
         {/* 固件 */}
-        <View className='block normal'>
-          <Text className='block-label'>固件</Text>
-          <van-icon class='icon normal-icon' size='20px' name='arrow' />
-          <Text className='block-value' onClick={() => this.toFirmware()}>V1.02</Text>
+        <View className='block'>
+          <View className='normal' onClick={() => this.toFirmware()}>
+            <Text className='block-label'>固件</Text>
+            <van-icon class='icon normal-icon' size='20px' name='arrow' />
+            <Text className='block-value'>V1.02</Text>
+          </View>
         </View>
         {/* 删除按钮 */}
         <Button className='del-button' type='default'>删除设备</Button>
+
+        {/* rtc弹窗 */}
+        <van-dialog
+          class='dialog'
+          use-slot
+          title=''
+          confirm-button-text='同步手机时间'
+          show={this.state.showRtc}
+          show-cancel-button
+          onClose={() => this.closeDialog()}
+          onConfirm={() => this.closeDialog()}
+          onCancel={() => this.closeDialog()}
+        >
+          <View className='dialog-content'>
+            <View className='content'>
+              <Text className='content-label phone-text'>手机：</Text>
+              <Text className='content-value phone-text'>{ this.state.phoneValue }</Text>
+            </View>
+            <View className='content'>
+              <Text className='content-label rtc-text'>RTC：</Text>
+              <Text className='content-value rtc-text'>{ this.state.rtcValue || '未读取' }</Text>
+            </View>
+          </View>
+        </van-dialog>
       </View>
     )
   }

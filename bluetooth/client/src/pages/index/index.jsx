@@ -142,12 +142,19 @@ export default class Index extends Component {
     console.log('clickCancel')
   }
 
+  changeEle () {
+    this.setState({
+      eleNum: Math.random() * 100,
+      eleLoading: !this.state.eleLoading
+    })
+  }
+
   render () {
     return (
       <View className='index'>
         <View className='add'>
           <Text className='add-button' onClick={() => console.log('批量设置')}>批量设置</Text>
-          <Text className='add-button' onClick={() => console.log('一键同步')}>一键同步</Text>
+          <Text className='add-button' onClick={() => this.changeEle()}>一键同步</Text>
           <Text className='add-button' onClick={() => this.showDialog()}>+ 添加设备</Text>
         </View>
         {

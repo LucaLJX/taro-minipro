@@ -65,8 +65,9 @@
       .device-ele {
         position: absolute;
         z-index: 120;
-        height: 19rpx;
-        top: 21rpx;
+        height: 20rpx;
+        top: 50%;
+        margin-top: -10rpx;
         left: 10rpx;
       }
       .ele-red {

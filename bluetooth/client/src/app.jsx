@@ -15,7 +15,7 @@ class App extends Component {
       'pages/index/index',
       'pages/setting/index',
       'pages/firmware/index',
-      'pages/test/index'
+      'pages/test/index',
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -23,13 +23,15 @@ class App extends Component {
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'white'
     },
-    // cloud: true
+    cloud: true
   }
 
   componentDidMount () {
-    // if (process.env.TARO_ENV === 'weapp') {
-    //   Taro.cloud.init()
-    // }
+    if (process.env.TARO_ENV === 'weapp') {
+      Taro.cloud.init({
+        env: envId
+      })
+    }
   }
 
   componentDidShow () {}

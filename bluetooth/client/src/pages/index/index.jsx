@@ -53,9 +53,8 @@ export default class Index extends Component {
       })
     })
     .catch(err => {
-      Taro.showModal({
-        title: '蓝牙未开启',
-        content: '请打开您的蓝牙设置，然后重启小程序'
+      this.setState({
+        blueToothOpen: false
       })
     })
   }
@@ -151,11 +150,21 @@ export default class Index extends Component {
 
   render () {
     return (
-      <View className='index'>
-        <View className='add'>
-          <Text className='add-button' onClick={() => console.log('批量设置')}>批量设置</Text>
-          <Text className='add-button' onClick={() => this.changeEle()}>一键同步</Text>
-          <Text className='add-button' onClick={() => this.showDialog()}>+ 添加设备</Text>
+      <View className='index' style={{
+        paddingTop: this.state.blueToothOpen ? '80rpx' : '140rpx'
+      }}>
+        <View className='top-content' style={{
+          height: this.state.blueToothOpen ? '80rpx' : '138rpx'
+        }}>
+          {
+            !this.state.blueToothOpen &&
+            <Text className='warning'>手机蓝牙未开启，请开启蓝牙...</Text>
+          }
+          <View className='add'>
+            <Text className='add-button' onClick={() => console.log('批量设置')}>批量设置</Text>
+            <Text className='add-button' onClick={() => this.changeEle()}>一键同步</Text>
+            <Text className='add-button' onClick={() => this.showDialog()}>+ 添加设备</Text>
+          </View>
         </View>
         {
           this.state.deviceList.map((item, i) => {

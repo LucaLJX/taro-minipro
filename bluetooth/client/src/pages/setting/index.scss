@@ -1,7 +1,6 @@
 .index {
   background-color: rgba(239, 239, 244, 1);
   min-height: 100vh;
-  padding-bottom: 40rpx;
   .bottom-40 {
     margin-bottom: 40rpx;
   }
@@ -111,6 +110,7 @@
     line-height: 230rpx;
     font-size: 104rpx;
     color: #fff;
+    border-top: 0;
     .time-icon {
       margin-top: -16rpx;
       height: 230rpx;

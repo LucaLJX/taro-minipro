@@ -57,8 +57,24 @@
     width: 100rpx;
     padding: 20rpx;
     .icon {
-      height: 48rpx;
+      height: 60rpx;
+      width: 60rpx;
       display: block;
+      position: relative;
+      z-index: 100;
+      .device-ele {
+        position: absolute;
+        z-index: 120;
+        height: 19rpx;
+        top: 21rpx;
+        left: 10rpx;
+      }
+      .ele-red {
+        background-color: #ff3000;
+      }
+      .ele-black {
+        background-color: #333;
+      }
     }
     .type {
       font-size: 28rpx;

@@ -1,7 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Image, Button } from '@tarojs/components'
 import './index.scss'
-import Login from '../../components/login/index'
 
 const BlueToothItemVo = {
   deviceId: '',
@@ -23,7 +22,12 @@ export default class Index extends Component {
     // 蓝牙是否开启
     blueToothOpen: false,
     blueToothList: [],
-    searchBlueLoading: false
+    searchBlueLoading: false,
+    eleBlack: require('../../assets/image/ele-black.png'),
+    eleRed: require('../../assets/image/ele-red.png'),
+    eleLoadingImg: require('../../assets/image/ele-loading.png'),
+    eleNum: 40,
+    eleLoading: true
   }
 
   config = {
@@ -161,10 +165,40 @@ export default class Index extends Component {
                   <Text className='name'>A机</Text>
                   <Text className='time'>08:25:26:03</Text>
                 </View>
-                <View className='device-right'>
-                  <View className='icon'></View>
-                  <Text className='type'>25P</Text>
-                </View>
+                {/* 电量展示 */}
+                {
+                  this.state.eleLoading &&
+                  <View className='device-right'>
+                    <View className='icon'>
+                      <Image src={this.state.eleLoadingImg} style='width: 60rpx; height: 60rpx; position: absolute; top: 0; left: 0;z-index: 110;' />
+                    </View>
+                    <Text className='type'>25P</Text>
+                  </View>
+                }
+                {
+                  (!this.state.eleLoading && this.state.eleNum < 50) &&
+                  <View className='device-right'>
+                    <View className='icon'>
+                      <Image src={this.state.eleRed} style='width: 60rpx; height: 60rpx; position: absolute; top: 0; left: 0;z-index: 110;' />
+                      <View className='device-ele ele-red' style={{
+                        width: (this.state.eleNum / 100) * 38 + 'rpx'
+                      }}></View>
+                    </View>
+                    <Text className='type'>25P</Text>
+                  </View>
+                }
+                { (!this.state.eleLoading &&
+                  this.state.eleNum >= 50) &&
+                  <View className='device-right'>
+                    <View className='icon'>
+                      <Image src={this.state.eleBlack} style='width: 60rpx; height: 60rpx; position: absolute; top: 0; left: 0;z-index: 110;' />
+                      <View className='device-ele ele-black'  style={{
+                        width: (this.state.eleNum / 100) * 38 + 'rpx'
+                      }}></View>
+                    </View>
+                    <Text className='type'>25P</Text>
+                  </View>
+                }
               </View>
             )
           })
@@ -186,10 +220,40 @@ export default class Index extends Component {
                   <Text className='name'>A机</Text>
                   <Text className='time'>--:--:--:--</Text>
                 </View>
-                <View className='device-right'>
-                  <View className='icon'></View>
-                  <Text className='type'>--</Text>
-                </View>
+                {/* 电量展示 */}
+                {
+                  this.state.eleLoading &&
+                  <View className='device-right'>
+                    <View className='icon'>
+                      <Image src={this.state.eleLoadingImg} style='width: 60rpx; height: 60rpx; position: absolute; top: 0; left: 0;z-index: 110;' />
+                    </View>
+                    <Text className='type'>25P</Text>
+                  </View>
+                }
+                {
+                  (!this.state.eleLoading && this.state.eleNum < 50) &&
+                  <View className='device-right'>
+                    <View className='icon'>
+                      <Image src={this.state.eleRed} style='width: 60rpx; height: 60rpx; position: absolute; top: 0; left: 0;z-index: 110;' />
+                      <View className='device-ele ele-red' style={{
+                        width: (this.state.eleNum / 100) * 38 + 'rpx'
+                      }}></View>
+                    </View>
+                    <Text className='type'>25P</Text>
+                  </View>
+                }
+                {
+                  (!this.state.eleLoading && this.state.eleNum >= 50) &&
+                  <View className='device-right'>
+                    <View className='icon'>
+                      <Image src={this.state.eleBlack} style='width: 60rpx; height: 60rpx; position: absolute; top: 0; left: 0;z-index: 110;' />
+                      <View className='device-ele ele-black'  style={{
+                        width: (this.state.eleNum / 100) * 38 + 'rpx'
+                      }}></View>
+                    </View>
+                    <Text className='type'>25P</Text>
+                  </View>
+                }
               </View>
             )
           })

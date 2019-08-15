@@ -243,8 +243,9 @@ export default class Index extends Component {
           class='time-modal'
           use-slot
           closeOnClickOverlay={true}
-          show-confirm-button={false}
-          show-cancel-button={true}
+          // show-confirm-button={false}
+          show-cancel-button={false}
+          confirmButtonText='同步 RTC'
           show={this.state.timeModalVisible}
           onClose={() => this.setState({
             timeModalVisible: false
@@ -252,7 +253,7 @@ export default class Index extends Component {
         >
           <View className='time-content'>
             <van-button class='time-button'>从零开始</van-button>
-            <van-button class='time-button color-lite-blue'>同步 RTC</van-button>
+            {/* <van-button class='time-button color-lite-blue'>同步 RTC</van-button> */}
           </View>
         </van-dialog>
         {/* 信号输出 */}

@@ -21,28 +21,7 @@
 
   .content {
     width: 100%;
-    border-top: 1px solid #e8e8e8;
     margin-top: 162rpx;
-
-    .line {
-      border-bottom: 1px solid #e8e8e8;
-      display: flex;
-      flex-direction: row;
-      padding: 0 34rpx;
-      font-size: 28rpx;
-      height: 80rpx;
-      line-height: 80rpx;
-
-      .line-label {
-        width: 50%;
-        text-align: left;
-      }
-
-      .line-value {
-        width: 50%;
-        text-align: right;
-      }
-    }
   }
 
   .dialog {

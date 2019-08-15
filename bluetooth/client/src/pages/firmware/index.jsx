@@ -23,7 +23,8 @@ export default class Index extends Component {
       'van-dialog': '../../components/vant/dialog/index',
       'van-switch': '../../components/vant/switch/index',
       'van-icon': '../../components/vant/icon/index',
-      'van-slider': '../../components/vant/slider/index'
+      'van-slider': '../../components/vant/slider/index',
+      'van-field': '../../components/vant/field/index'
     },
   }
 
@@ -76,20 +77,32 @@ export default class Index extends Component {
         </View>
         <Text className='head-title'>{ this.state.title }</Text>
         <View className='content'>
-          <View className='line'>
-            <Text className='line-label'>固件版本</Text>
-            <Text className='line-value'>V 1.2</Text>
-          </View>
-          <View className='line'>
-            <Text className='line-label'>固件日期</Text>
-            <Text className='line-value'>2019.01.15</Text>
-          </View>
-          <View className='line'>
-            <Text className='line-label'>新版本</Text>
-            <Text className='line-value' style={this.getColor()} onClick={() => this.updateClick()}>{
+          <van-field
+            value={'V 1.2'}
+            label='固件版本'
+            input-align='right'
+            placeholder=''
+            readonly
+          />
+          <van-field
+            value={'2019.01.15'}
+            label='固件日期'
+            input-align='right'
+            placeholder=''
+            readonly
+          />
+          <van-field
+            value={''}
+            label='新版本'
+            input-align='right'
+            placeholder=''
+            readonly
+            use-button-slot
+          >
+            <Text slot='button' className='line-value' style={this.getColor()} onClick={() => this.updateClick()}>{
               this.state.newUpdate ? `${this.state.upDateVersion} 可升级！` : '无新固件'
             }</Text>
-          </View>
+          </van-field>
         </View>
         <van-dialog
           class='dialog'

@@ -1,0 +1,42 @@
+.index {}
+.userAvatar {
+  width: 152rpx;
+  height: 152rpx;
+  border-radius: 152rpx;
+  margin: 200rpx auto 0 auto;
+  border: 1px solid #fff;
+  overflow: hidden;  
+  display: block;  
+}
+.userNickName {
+  font-size: 40rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  text-align: center;
+  width: 100%;
+  margin-top: 34rpx;
+}
+.tips {
+  font-size: 26rpx;
+  color: #acacac;
+  text-align: center;
+  width: 100%;
+  margin-top: 26rpx;
+}
+.cancel-button {
+  display: block;
+  width: 516rpx;
+  margin: 70rpx auto 0 auto;
+  color: #5f87b5!important;
+  text-align: center;
+  font-size: 28rpx;
+}
+.login-button {
+  .van-button {
+    width: 516rpx;
+    display: block;
+    margin: 144rpx auto 0 auto;
+    background-color: #5f87b5!important;
+    color: #f0f6fd!important;
+  }
+}

@@ -7,6 +7,7 @@
   top: 0;
   left: 0;
   width: 100%;
+  z-index: 999;
 }
 .warning {
   height: 60rpx;
@@ -145,8 +146,7 @@
   }
 }
 .dialog-content {
-  min-height: 200rpx;
-  max-height: 662rpx;
+  height: 662rpx;
   overflow: scroll;
   background-color: #ddd;
 }
@@ -171,7 +171,7 @@
   color: #666;
   .blue-icon {
     float: left;
-    width: 40rpx;
+    width: 60rpx;
     height: 40rpx;
     margin: 0 30rpx;
   }
@@ -181,20 +181,26 @@
 }
 .dialog-button {
   .button-left {
-    font-size: 28rpx;
-    float: left;
-    width: 50%;
-    color: #5c9adf;
-    height: 108rpx;
-    line-height: 108rpx;
+    .van-button {
+      display: block;
+      font-size: 28rpx;
+      float: left;
+      width: 50%;
+      color: #5c9adf;
+      height: 108rpx;
+      line-height: 108rpx;
+    }
   }
   .button-right {
-    font-size: 28rpx;
-    float: right;
-    width: 50%;
-    color: #101010;
-    height: 108rpx;
-    line-height: 108rpx;
+    .van-button {
+      display: block;
+      font-size: 28rpx;
+      float: right;
+      width: 50%;
+      color: #101010;
+      height: 108rpx;
+      line-height: 108rpx;
+    }
   }
 }
 

@@ -15,10 +15,10 @@ const BlueToothItemVo = {
 export default class Index extends Component {
 
   state = {
-    deviceList: [1, 3,4 ],
+    deviceList: [1, 3,4,1, 3,4 ],
     imgUrl: require('../../assets/image/device.png'),
     visible: false,
-    blueToothIcon: require('../../assets/image/steam.png'),
+    blueToothIcon: require('../../assets/image/device.png'),
     // 蓝牙是否开启
     blueToothOpen: false,
     blueToothList: [],
@@ -281,9 +281,10 @@ export default class Index extends Component {
           title=''
           show={this.state.visible}
           show-confirm-button={false}
+          onTouchmove={(e) => e.stopPropagation()}
           onClose={() => this.closeDialog()}
         >
-          <View className='dialog-title'>
+          <View className='dialog-title' onTouchmove={(e) => e.stopPropagation()}>
             <Text className='title-label'>蓝牙</Text>
             <Text className='title-status'>
             {
@@ -316,9 +317,9 @@ export default class Index extends Component {
               })
             }
           </View>
-          <View className='dialog-button'>
-            <Button className='button-left' onClick={() => this.bluetoothDevicesDiscovery()}>重新扫描</Button>
-            <Button className='button-right' onClick={() => this.closeDialog()}>已完成</Button>
+          <View className='dialog-button' onTouchmove={(e) => e.stopPropagation()}>
+            <van-button class='button-left' onClick={() => this.bluetoothDevicesDiscovery()}>重新扫描</van-button>
+            <van-button class='button-right' onClick={() => this.closeDialog()}>已完成</van-button>
           </View>
         </van-dialog>
       </View>

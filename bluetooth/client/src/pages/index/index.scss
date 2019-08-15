@@ -2,22 +2,19 @@
   background-color: #efeff4;
   padding-top: 80rpx;
 }
+#custom-selector {
+  .van-notify {
+    height: 64rpx;
+    line-height: 64rpx;
+    padding: 0;
+  }
+}
 .top-content {
   position: fixed;
-  top: 0;
+  top: 64rpx;
   left: 0;
   width: 100%;
   z-index: 999;
-}
-.warning {
-  height: 60rpx;
-  line-height: 60rpx;
-  display: block;
-  width: 100%;
-  background-color: #ff5151;
-  color: #fff;
-  font-size: 28rpx;
-  text-align: center;
 }
 .add {
   height: 78rpx;

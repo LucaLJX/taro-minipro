@@ -1,6 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Image, Button } from '@tarojs/components'
 import './index.scss'
+import Notify from '../../components/vant/notify/notify'
 
 const BlueToothItemVo = {
   deviceId: '',
@@ -40,7 +41,8 @@ export default class Index extends Component {
       'van-switch': '../../components/vant/switch/index',
       'van-icon': '../../components/vant/icon/index',
       'van-slider': '../../components/vant/slider/index',
-      'van-loading': '../../components/vant/loading/index'
+      'van-loading': '../../components/vant/loading/index',
+      'van-notify': '../../components/vant/notify/index'
     },
   }
 
@@ -60,7 +62,14 @@ export default class Index extends Component {
   }
 
   componentDidMount () {
-    console.log()
+    if (!this.state.blueToothOpen) {
+      Notify({
+        text: '手机蓝牙未开启，请开启蓝牙...',
+        duration: 999999,
+        selector: '#custom-selector',
+        backgroundColor: '#ff5151'
+      })
+    }
   }
 
   componentWillUnmount () { }
@@ -153,13 +162,16 @@ export default class Index extends Component {
       <View className='index' style={{
         paddingTop: this.state.blueToothOpen ? '80rpx' : '140rpx'
       }}>
+        {
+          !this.state.blueToothOpen &&
+            <van-notify
+            id='custom-selector'
+          />
+        }
         <View className='top-content' style={{
-          height: this.state.blueToothOpen ? '80rpx' : '138rpx'
+          height: this.state.blueToothOpen ? '80rpx' : '80rpx',
+          top: this.state.blueToothOpen ? '0' : '64rpx'
         }}>
-          {
-            !this.state.blueToothOpen &&
-            <Text className='warning'>手机蓝牙未开启，请开启蓝牙...</Text>
-          }
           <View className='add'>
             <Text className='add-button' onClick={() => console.log('批量设置')}>批量设置</Text>
             <Text className='add-button' onClick={() => this.changeEle()}>一键同步</Text>

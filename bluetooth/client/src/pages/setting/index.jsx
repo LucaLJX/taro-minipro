@@ -58,7 +58,9 @@ export default class Index extends Component {
       '24',
       '25',
       '29.97nd',
-      '29.97df'
+      '29.97df',
+      '30nd',
+      '30df'
     ],
     fpsChecked: '',
     showFps: false,

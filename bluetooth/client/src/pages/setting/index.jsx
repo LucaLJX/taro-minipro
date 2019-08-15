@@ -242,15 +242,16 @@ export default class Index extends Component {
           use-slot
           closeOnClickOverlay={true}
           show-confirm-button={false}
-          show-cancel-button={false}
+          show-cancel-button={true}
           show={this.state.timeModalVisible}
-          confirm-button-open-type="getUserInfo"
           onClose={() => this.setState({
             timeModalVisible: false
           })}
         >
-          <van-button class='time-button'>从零开始</van-button>
-          <van-button class='time-button color-lite-blue'>同步 RTC</van-button>
+          <View className='time-content'>
+            <van-button class='time-button'>从零开始</van-button>
+            <van-button class='time-button color-lite-blue'>同步 RTC</van-button>
+          </View>
         </van-dialog>
         {/* 信号输出 */}
         <View className='speed'>
@@ -271,105 +272,134 @@ export default class Index extends Component {
           </View>
         </View>
         {/* 名称 */}
-        <View className='block normal'>
-          <Text className='block-label'>名称</Text>
-          <Text className='block-value'>A机</Text>
+        <View>
+          <van-field
+            value={'A机'}
+            label='名称'
+            input-align='right'
+            placeholder=''
+            readonly
+          />
         </View>
         {/* 帧率  vant */}
-        <View className='block'>
-          <View className='normal' onClick={() => this.showFps()}>
-            <Text className='block-label'>帧率</Text>
-            <van-icon class='icon normal-icon' size='20px' name='arrow' />
-            <Text className='block-value'>{ this.state.fpsChecked || '请选择'}</Text>
-          </View>
-          <van-popup
-            show={this.state.showFps}
-            position={'bottom'}
-            onClose={() => this.colseFps()}
-          >
-            <van-picker
-              onCancel={() => this.colseFps()}
-              onConfirm={(e) => this.confirmFps(e)}
-              show-toolbar
-              title='帧率'
-              columns={this.state.fpsSelector}
-            />
-          </van-popup>
+        <View onClick={() => this.showFps()}>
+          <van-field
+            value={this.state.fpsChecked}
+            label='帧率'
+            input-align='right'
+            is-link={true}
+            placeholder='请选择'
+            readonly
+            onClickIcon={() => this.showFps()}
+          />
         </View>
+        <van-popup
+          show={this.state.showFps}
+          position={'bottom'}
+          onClose={() => this.colseFps()}
+        >
+          <van-picker
+            onCancel={() => this.colseFps()}
+            onConfirm={(e) => this.confirmFps(e)}
+            show-toolbar
+            title='帧率'
+            columns={this.state.fpsSelector}
+          />
+        </van-popup>
         {/* 设备型号 */}
-        <View className='block'>
-          <View className='normal' onClick={() => this.showDevice()}>
-            <Text className='block-label'>设备型号</Text>
-            <van-icon class='icon normal-icon' size='20px' name='arrow' />
-            <Text className='block-value'>{ this.state.deviceChecked || '请选择' }</Text>
-          </View>
-          <van-popup
-            show={this.state.showDevice}
-            position={'bottom'}
-            onClose={() => this.colseDevice()}
-          >
-            <van-picker
-              onChange={(e) => this.changeDeviceColumn(e)}
-              onCancel={() => this.colseDevice()}
-              onConfirm={(e) => this.confirmDevice(e)}
-              show-toolbar
-              title='设备型号'
-              columns={this.state.deviceSelector}
-            />
-          </van-popup>
+        <View onClick={() => this.showDevice()}>
+          <van-field
+            value={this.state.deviceChecked}
+            label='设备型号'
+            input-align='right'
+            is-link={true}
+            placeholder='请选择'
+            readonly
+          />
         </View>
+        <van-popup
+          show={this.state.showDevice}
+          position={'bottom'}
+          onClose={() => this.colseDevice()}
+        >
+          <van-picker
+            onChange={(e) => this.changeDeviceColumn(e)}
+            onCancel={() => this.colseDevice()}
+            onConfirm={(e) => this.confirmDevice(e)}
+            show-toolbar
+            title='设备型号'
+            columns={this.state.deviceSelector}
+          />
+        </van-popup>
         {/* RTC */}
-        <View className='block normal'>
-          <View className='normal' onClick={() => this.showRtcClick()}>
-            <Text className='block-label'>RTC</Text>
-            <van-icon class='icon normal-icon' size='20px' name='arrow' />
-            <Text className='block-value'>{ this.state.deviceChecked || '请同步' }</Text>
-          </View>
-         
+        <View onClick={() => this.showRtcClick()}>
+          <van-field
+            value={this.state.rtcValue}
+            label='RTC'
+            input-align='right'
+            is-link={true}
+            placeholder='请同步'
+            readonly
+          />
         </View>
         {/* USER BITS */}
-        <View className='block'>
-          <View className='normal' onClick={() => this.showUser()}>
-            <Text className='block-label'>USER BITS</Text>
-            <van-icon class='icon normal-icon' size='20px' name='arrow' />
-            <Text className='block-value'>{ this.state.userChecked || '请选择' }</Text>
-          </View>
-          <van-popup
-            show={this.state.showUser}
-            position={'bottom'}
-            onClose={() => this.colseUser()}
-          >
-            <van-picker
-              onCancel={() => this.colseUser()}
-              onConfirm={(e) => this.confirmUser(e)}
-              show-toolbar
-              title='USER BITS'
-              columns={this.state.userSelector}
-            />
-          </van-popup>
+        <View onClick={() => this.showUser()}>
+          <van-field
+            value={this.state.userChecked}
+            label='USER BITS'
+            input-align='right'
+            is-link={true}
+            placeholder='请选择'
+            readonly
+          />
         </View>
+        <van-popup
+          show={this.state.showUser}
+          position={'bottom'}
+          onClose={() => this.colseUser()}
+        >
+          <van-picker
+            onCancel={() => this.colseUser()}
+            onConfirm={(e) => this.confirmUser(e)}
+            show-toolbar
+            title='USER BITS'
+            columns={this.state.userSelector}
+          />
+        </van-popup>
         {/* 单反模式 */}
-        <View className='block normal bottom-40'>
-          <Text className='block-label'>单反模式</Text>
-          <van-switch class='block-switch' checked={this.switchChecked} onChange={(e) => this.setState({
-            switchChecked: e.detail
-          })} />
+        <View className='switch-wrapper'>
+          <van-field
+            value=''
+            label='单反模式'
+            input-align='right'
+            readonly
+          />
+          <van-switch class='switch' checked={this.switchChecked} onChange={(e) => this.setState({
+              switchChecked: e.detail
+            })} />
         </View>
         {/* 电量 */}
-        <View className='block normal'>
-          <Text className='block-label'>电量</Text>
-          <Text className='block-value'>72% 3.1V</Text>
+        <View>
+          <van-field
+            value='72% 3.1V'
+            label='电量'
+            input-align='right'
+            readonly
+          />
         </View>
         {/* 固件 */}
-        <View className='block'>
-          <View className='normal' onClick={() => this.toFirmware()}>
-            <Text className='block-label'>固件</Text>
-            <van-icon class='icon normal-icon' size='20px' name='arrow' />
-            <Text className='block-value'>V1.02</Text>
-          </View>
+        <View onClick={() => this.toFirmware()}>
+          <van-field
+            value={'V1.02'}
+            label='固件'
+            input-align='right'
+            is-link={true}
+            placeholder='请选择'
+            readonly
+          />
         </View>
         {/* 删除按钮 */}
-        <Button className='del-button' type='default'>删除设备</Button>
+        <van-button class='del-button' type='danger'>删除设备</van-button>
 
         {/* rtc弹窗 */}
         <van-dialog

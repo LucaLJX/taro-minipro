@@ -1,6 +1,16 @@
 .index {
   background-color: rgba(239, 239, 244, 1);
   min-height: 100vh;
+  .switch-wrapper {
+    position: relative;
+    z-index: 80;
+    .switch {
+      position: absolute;
+      right: 40rpx;
+      top: 10rpx;
+      z-index: 90;
+    }
+  }
   .bottom-40 {
     margin-bottom: 40rpx;
   }
@@ -15,48 +25,48 @@
     background-color: #fff;
     border-top: 2rpx solid #f4f4f4;
   }
-  .normal {
-    height: 86rpx;
-    line-height: 86rpx;
-    font-size: 28rpx;
-    color: #484848;
-    .block-label {
-      display: block;
-      float: left;
-      height: 86rpx;
-      line-height: 86rpx;
-    }
-    .block-value {
-      display: block;
-      float: right;
-      height: 86rpx;
-      line-height: 86rpx;
-      min-width: 120rpx;
-      text-align: right;
-    }
-    .normal-icon {
-      height: 86rpx;
-      .van-icon {
-        line-height: 86rpx;
-      }
-    }
-    .block-switch {
-      float: right;
-      height: 86rpx;
-      .van-switch {
-        margin-top: 11rpx;
-      }
-    }
-    .block-picker {
-      display: block;
-      float: right;
-      .picker {
-        min-width: 100rpx;
-        height: 86rpx;
-        text-align: right;
-      }
-    }
-  }
+  // .normal {
+  //   height: 86rpx;
+  //   line-height: 86rpx;
+  //   font-size: 28rpx;
+  //   color: #484848;
+  //   .block-label {
+  //     display: block;
+  //     float: left;
+  //     height: 86rpx;
+  //     line-height: 86rpx;
+  //   }
+  //   .block-value {
+  //     display: block;
+  //     float: right;
+  //     height: 86rpx;
+  //     line-height: 86rpx;
+  //     min-width: 120rpx;
+  //     text-align: right;
+  //   }
+  //   .normal-icon {
+  //     height: 86rpx;
+  //     .van-icon {
+  //       line-height: 86rpx;
+  //     }
+  //   }
+  //   .block-switch {
+  //     float: right;
+  //     height: 86rpx;
+  //     .van-switch {
+  //       margin-top: 11rpx;
+  //     }
+  //   }
+  //   .block-picker {
+  //     display: block;
+  //     float: right;
+  //     .picker {
+  //       min-width: 100rpx;
+  //       height: 86rpx;
+  //       text-align: right;
+  //     }
+  //   }
+  // }
   .icon {
     color: #c9c9c9;
     float: right;
@@ -120,23 +130,31 @@
     }
   }
   .time-modal {
-    .at-modal__content {
-      padding: 0!important;
-    }
-    .time-button {
-      display: block;
+    overflow: hidden!important;
+    .time-content {
       width: 100%;
-      .van-button {
+      overflow: hidden!important;
+      .time-button {
         display: block;
+        width: 100%;
+        .van-button {
+          height: 100rpx;
+          line-height: 100rpx;
+          font-size: 32rpx;
+          display: block;
+        }
       }
     }
   }
   // 删除按钮
   .del-button {
-    width: 700rpx;
-    margin: 40rpx auto;
-    color: #fd5b73;
-    border: 1rpx dotted #fd5b73;
+    .van-button {
+      display: block;
+      width: 700rpx;
+      margin: 40rpx auto;
+    }
+    // color: #fd5b73;
+    // border: 1rpx dotted #fd5b73;
   }
   // rtc弹窗
   .dialog {

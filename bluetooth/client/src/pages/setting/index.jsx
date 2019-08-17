@@ -2,49 +2,11 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Image, Button, Switch, Picker } from '@tarojs/components'
 import './index.scss'
 import dayjs from 'dayjs'
-import Login from '../../components/login/index'
-
-const deviceData = {
-  '无': [
-    '无'
-  ],
-  'ARRI': [
-    'ALEXA LF',
-    'ALEXA MINI',
-    'ALEXA SXT',
-    'AMIRA'
-  ],
-  'RED': [
-    'Dragon-X',
-    'GEMINI 5K',
-    'HELIUM 8K'
-  ],
-  'SONY': [
-    'F55',
-    'FS7',
-    'F65',
-    'EX280',
-    'A7'
-  ],
-  'BMD': [
-    'BMPCC',
-    'BMCC',
-    'URSA MINI PRO'
-  ],
-  'SOUND DEVICES': [
-    '6 SERIES',
-    '7 SERIES',
-    'SCORPIO'
-  ],
-  'ZOOM': [
-    'F8',
-    'F4'
-  ],
-  'ROLAND': [
-    'R88',
-    'R4 PRO'
-  ]
-}
+import {
+  getFpsList,
+  getModelList,
+  getBitsList
+} from '../../service/deviceConfig'
 
 export default class Index extends Component {
 
@@ -54,37 +16,16 @@ export default class Index extends Component {
     speed: 55,
     // 帧率
     fpsSelector: [
-      '23.98',
-      '24',
-      '25',
-      '29.97nd',
-      '29.97df',
-      '30nd',
-      '30df'
     ],
     fpsChecked: '',
     showFps: false,
     // 设备
-    deviceSelector: [
-      {
-        values: Object.keys(deviceData),
-        className: 'column1'
-      },
-      {
-        values: deviceData['无'],
-        className: 'column2',
-      }
-    ],
+    modelList: [],
+    deviceSelector: [],
     deviceChecked: '',
     showDevice: false,
     // user bits
-    userSelector: [
-      '无',
-      'DD-MM-YY',
-      'YY-MM-DD',
-      'DD-MM-YYY',
-      'MM-DD-YYY'
-    ],
+    userSelector: [],
     userChecked: '',
     showUser: false,
     // rec
@@ -109,7 +50,32 @@ export default class Index extends Component {
     },
   }
 
-  componentWillMount () { }
+  async componentWillMount () {
+    const result = await Promise.all([
+      getFpsList(),
+      getModelList(),
+      getBitsList()
+    ])
+    const fpsList = result[0].data
+    const modelList = result[1]
+    const bitsList = result[2].data
+    const deviceSelector = [
+      {
+        values: modelList,
+        className: 'column1'
+      },
+      {
+        values: modelList[0].children,
+        className: 'column2',
+      }
+    ]
+    this.setState({
+      fpsSelector: fpsList,
+      deviceSelector: deviceSelector,
+      modelList: modelList,
+      userSelector: bitsList
+    })
+  }
 
   componentDidMount () { }
 
@@ -120,7 +86,6 @@ export default class Index extends Component {
   componentDidHide () { }
 
   clickTime () {
-    console.log('time show')
     this.setState({
       timeModalVisible: true
     })
@@ -141,7 +106,7 @@ export default class Index extends Component {
 
   confirmFps (e) {
     this.setState({
-      fpsChecked: e.detail.value,
+      fpsChecked: e.detail.value.text,
       showFps: false
     })
   }
@@ -161,18 +126,18 @@ export default class Index extends Component {
 
   changeDeviceColumn (e) {
     const { picker, value, index } = e.detail
-    picker.setColumnValues(1, deviceData[value[0]])
+    picker.setColumnValues(1, value[0].children)
   }
 
   confirmDevice (e) {
-    if (e.detail.value[0] === '无') {
+    if (e.detail.value[0].text === '无') {
       return this.setState({
         deviceChecked: '无',
         showDevice: false
       })
     }
     this.setState({
-      deviceChecked: `${e.detail.value[0]} ${e.detail.value[1]}`,
+      deviceChecked: `${e.detail.value[0].text} ${e.detail.value[1].text}`,
       showDevice: false
     })
   }
@@ -192,7 +157,7 @@ export default class Index extends Component {
 
   confirmUser (e) {
     this.setState({
-      userChecked: e.detail.value,
+      userChecked: e.detail.value.text,
       showUser: false
     })
   }
@@ -377,12 +342,14 @@ export default class Index extends Component {
             input-align='right'
             readonly
           />
-          <van-switch class='switch' checked={this.switchChecked} onChange={(e) => this.setState({
+          <van-switch class='switch' size='20px' checked={this.switchChecked} onChange={(e) => this.setState({
               switchChecked: e.detail
             })} />
         </View>
         {/* 电量 */}
-        <View>
+        <View style={{
+          marginTop: '30rpx'
+        }}>
           <van-field
             value='72% 3.1V'
             label='电量'

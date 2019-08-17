@@ -1,7 +1,9 @@
-import { VantComponent } from '../common/component';
-import { transition } from '../mixins/transition';
-import { safeArea } from '../mixins/safe-area';
-VantComponent({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var component_1 = require("../common/component");
+var transition_1 = require("../mixins/transition");
+var safe_area_1 = require("../mixins/safe-area");
+component_1.VantComponent({
     classes: [
         'enter-class',
         'enter-active-class',
@@ -10,7 +12,7 @@ VantComponent({
         'leave-active-class',
         'leave-to-class'
     ],
-    mixins: [transition(false), safeArea()],
+    mixins: [transition_1.transition(false), safe_area_1.safeArea()],
     props: {
         transition: {
             type: String,
@@ -36,19 +38,19 @@ VantComponent({
             observer: 'observeClass'
         }
     },
-    created() {
+    created: function () {
         this.observeClass();
     },
     methods: {
-        onClickOverlay() {
+        onClickOverlay: function () {
             this.$emit('click-overlay');
             if (this.data.closeOnClickOverlay) {
                 this.$emit('close');
             }
         },
-        observeClass() {
-            const { transition, position } = this.data;
-            const updateData = {
+        observeClass: function () {
+            var _a = this.data, transition = _a.transition, position = _a.position;
+            var updateData = {
                 name: transition || position
             };
             if (transition === 'none') {

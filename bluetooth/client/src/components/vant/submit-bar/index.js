@@ -1,7 +1,9 @@
-import { VantComponent } from '../common/component';
-import { safeArea } from '../mixins/safe-area';
-VantComponent({
-    mixins: [safeArea()],
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var component_1 = require("../common/component");
+var safe_area_1 = require("../mixins/safe-area");
+component_1.VantComponent({
+    mixins: [safe_area_1.safeArea()],
     classes: [
         'bar-class',
         'price-class',
@@ -38,17 +40,17 @@ VantComponent({
         suffixLabel: String
     },
     methods: {
-        updatePrice() {
-            const { price, decimalLength } = this.data;
+        updatePrice: function () {
+            var _a = this.data, price = _a.price, decimalLength = _a.decimalLength;
             this.set({
                 hasPrice: typeof price === 'number',
                 priceStr: (price / 100).toFixed(decimalLength)
             });
         },
-        updateTip() {
+        updateTip: function () {
             this.set({ hasTip: typeof this.data.tip === 'string' });
         },
-        onSubmit(event) {
+        onSubmit: function (event) {
             this.$emit('submit', event.detail);
         }
     }

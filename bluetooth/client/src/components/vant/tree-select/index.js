@@ -1,6 +1,8 @@
-import { VantComponent } from '../common/component';
-const ITEM_HEIGHT = 44;
-VantComponent({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var component_1 = require("../common/component");
+var ITEM_HEIGHT = 44;
+component_1.VantComponent({
     classes: [
         'main-item-class',
         'content-item-class',
@@ -29,12 +31,13 @@ VantComponent({
         itemHeight: 0
     },
     watch: {
-        items() {
-            this.updateSubItems().then(() => {
-                this.updateMainHeight();
+        items: function () {
+            var _this = this;
+            this.updateSubItems().then(function () {
+                _this.updateMainHeight();
             });
         },
-        maxHeight() {
+        maxHeight: function () {
             this.updateItemHeight(this.data.subItems);
             this.updateMainHeight();
         },
@@ -42,37 +45,37 @@ VantComponent({
     },
     methods: {
         // 当一个子项被选择时
-        onSelectItem(event) {
-            const { item } = event.currentTarget.dataset;
+        onSelectItem: function (event) {
+            var item = event.currentTarget.dataset.item;
             if (!item.disabled) {
                 this.$emit('click-item', item);
             }
         },
         // 当一个导航被点击时
-        onClickNav(event) {
-            const { index } = event.currentTarget.dataset;
-            const item = this.data.items[index];
+        onClickNav: function (event) {
+            var index = event.currentTarget.dataset.index;
+            var item = this.data.items[index];
             if (!item.disabled) {
-                this.$emit('click-nav', { index });
+                this.$emit('click-nav', { index: index });
             }
         },
         // 更新子项列表
-        updateSubItems() {
-            const { items, mainActiveIndex } = this.data;
-            const { children = [] } = items[mainActiveIndex] || {};
+        updateSubItems: function () {
+            var _a = this.data, items = _a.items, mainActiveIndex = _a.mainActiveIndex;
+            var _b = (items[mainActiveIndex] || {}).children, children = _b === void 0 ? [] : _b;
             this.updateItemHeight(children);
             return this.set({ subItems: children });
         },
         // 更新组件整体高度，根据最大高度和当前组件需要展示的高度来决定
-        updateMainHeight() {
-            const { items = [], subItems = [] } = this.data;
-            const maxHeight = Math.max(items.length * ITEM_HEIGHT, subItems.length * ITEM_HEIGHT);
+        updateMainHeight: function () {
+            var _a = this.data, _b = _a.items, items = _b === void 0 ? [] : _b, _c = _a.subItems, subItems = _c === void 0 ? [] : _c;
+            var maxHeight = Math.max(items.length * ITEM_HEIGHT, subItems.length * ITEM_HEIGHT);
             this.set({ mainHeight: Math.min(maxHeight, this.data.maxHeight) });
         },
         // 更新子项列表高度，根据可展示的最大高度和当前子项列表的高度决定
-        updateItemHeight(subItems) {
-            const itemHeight = Math.min(subItems.length * ITEM_HEIGHT, this.data.maxHeight);
-            return this.set({ itemHeight });
+        updateItemHeight: function (subItems) {
+            var itemHeight = Math.min(subItems.length * ITEM_HEIGHT, this.data.maxHeight);
+            return this.set({ itemHeight: itemHeight });
         }
     }
 });

@@ -1,8 +1,10 @@
-import { VantComponent } from '../common/component';
-import { RED } from '../common/color';
-import { safeArea } from '../mixins/safe-area';
-VantComponent({
-    mixins: [safeArea()],
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var component_1 = require("../common/component");
+var color_1 = require("../common/color");
+var safe_area_1 = require("../mixins/safe-area");
+component_1.VantComponent({
+    mixins: [safe_area_1.safeArea()],
     props: {
         text: String,
         color: {
@@ -11,7 +13,7 @@ VantComponent({
         },
         backgroundColor: {
             type: String,
-            value: RED
+            value: color_1.RED
         },
         duration: {
             type: Number,
@@ -23,19 +25,20 @@ VantComponent({
         }
     },
     methods: {
-        show() {
-            const { duration } = this.data;
+        show: function () {
+            var _this = this;
+            var duration = this.data.duration;
             clearTimeout(this.timer);
             this.set({
                 show: true
             });
             if (duration > 0 && duration !== Infinity) {
-                this.timer = setTimeout(() => {
-                    this.hide();
+                this.timer = setTimeout(function () {
+                    _this.hide();
                 }, duration);
             }
         },
-        hide() {
+        hide: function () {
             clearTimeout(this.timer);
             this.set({
                 show: false

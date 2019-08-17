@@ -1,5 +1,18 @@
-import { VantComponent } from '../common/component';
-VantComponent({
+"use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var component_1 = require("../common/component");
+component_1.VantComponent({
     field: true,
     classes: ['icon-class'],
     props: {
@@ -40,33 +53,36 @@ VantComponent({
         innerValue: 0
     },
     watch: {
-        value(value) {
+        value: function (value) {
             if (value !== this.data.innerValue) {
                 this.set({ innerValue: value });
             }
         }
     },
     methods: {
-        onSelect(event) {
-            const { data } = this;
-            const { score } = event.currentTarget.dataset;
+        onSelect: function (event) {
+            var data = this.data;
+            var score = event.currentTarget.dataset.score;
             if (!data.disabled && !data.readonly) {
                 this.set({ innerValue: score + 1 });
                 this.$emit('input', score + 1);
                 this.$emit('change', score + 1);
             }
         },
-        onTouchMove(event) {
-            const { clientX, clientY } = event.touches[0];
-            this.getRect('.van-rate__icon', true).then((list) => {
-                const target = list
-                    .sort(item => item.right - item.left)
-                    .find(item => clientX >= item.left &&
-                    clientX <= item.right &&
-                    clientY >= item.top &&
-                    clientY <= item.bottom);
+        onTouchMove: function (event) {
+            var _this = this;
+            var _a = event.touches[0], clientX = _a.clientX, clientY = _a.clientY;
+            this.getRect('.van-rate__icon', true).then(function (list) {
+                var target = list
+                    .sort(function (item) { return item.right - item.left; })
+                    .find(function (item) {
+                    return clientX >= item.left &&
+                        clientX <= item.right &&
+                        clientY >= item.top &&
+                        clientY <= item.bottom;
+                });
                 if (target != null) {
-                    this.onSelect(Object.assign({}, event, { currentTarget: target }));
+                    _this.onSelect(__assign({}, event, { currentTarget: target }));
                 }
             });
         }

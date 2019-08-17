@@ -1,5 +1,7 @@
-import { VantComponent } from '../common/component';
-VantComponent({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var component_1 = require("../common/component");
+component_1.VantComponent({
     field: true,
     classes: ['input-class', 'right-icon-class'],
     props: {
@@ -61,69 +63,72 @@ VantComponent({
     data: {
         showClear: false
     },
-    beforeCreate() {
+    beforeCreate: function () {
         this.focused = false;
     },
     methods: {
-        onInput(event) {
-            const { value = '' } = event.detail || {};
+        onInput: function (event) {
+            var _this = this;
+            var _a = (event.detail || {}).value, value = _a === void 0 ? '' : _a;
             this.set({
-                value,
+                value: value,
                 showClear: this.getShowClear(value)
-            }, () => {
-                this.emitChange(value);
+            }, function () {
+                _this.emitChange(value);
             });
         },
-        onFocus(event) {
-            const { value = '', height = 0 } = event.detail || {};
-            this.$emit('focus', { value, height });
+        onFocus: function (event) {
+            var _a = event.detail || {}, _b = _a.value, value = _b === void 0 ? '' : _b, _c = _a.height, height = _c === void 0 ? 0 : _c;
+            this.$emit('focus', { value: value, height: height });
             this.focused = true;
             this.blurFromClear = false;
             this.set({
                 showClear: this.getShowClear()
             });
         },
-        onBlur(event) {
-            const { value = '', cursor = 0 } = event.detail || {};
-            this.$emit('blur', { value, cursor });
+        onBlur: function (event) {
+            var _this = this;
+            var _a = event.detail || {}, _b = _a.value, value = _b === void 0 ? '' : _b, _c = _a.cursor, cursor = _c === void 0 ? 0 : _c;
+            this.$emit('blur', { value: value, cursor: cursor });
             this.focused = false;
-            const showClear = this.getShowClear();
+            var showClear = this.getShowClear();
             if (this.data.value === value) {
                 this.set({
-                    showClear
+                    showClear: showClear
                 });
             }
             else if (!this.blurFromClear) {
                 // fix: the handwritten keyboard does not trigger input change
                 this.set({
-                    value,
-                    showClear
-                }, () => {
-                    this.emitChange(value);
+                    value: value,
+                    showClear: showClear
+                }, function () {
+                    _this.emitChange(value);
                 });
             }
         },
-        onClickIcon() {
+        onClickIcon: function () {
             this.$emit('click-icon');
         },
-        getShowClear(value) {
+        getShowClear: function (value) {
             value = value === undefined ? this.data.value : value;
             return (this.data.clearable && this.focused && value && !this.data.readonly);
         },
-        onClear() {
+        onClear: function () {
+            var _this = this;
             this.blurFromClear = true;
             this.set({
                 value: '',
                 showClear: this.getShowClear('')
-            }, () => {
-                this.emitChange('');
-                this.$emit('clear', '');
+            }, function () {
+                _this.emitChange('');
+                _this.$emit('clear', '');
             });
         },
-        onConfirm() {
+        onConfirm: function () {
             this.$emit('confirm', this.data.value);
         },
-        emitChange(value) {
+        emitChange: function (value) {
             this.$emit('input', value);
             this.$emit('change', value);
         }

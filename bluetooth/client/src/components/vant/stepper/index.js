@@ -1,5 +1,7 @@
-import { VantComponent } from '../common/component';
-VantComponent({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var component_1 = require("../common/component");
+component_1.VantComponent({
     field: true,
     classes: [
         'input-class',
@@ -27,19 +29,19 @@ VantComponent({
         }
     },
     computed: {
-        minusDisabled() {
+        minusDisabled: function () {
             return this.data.disabled || this.data.value <= this.data.min;
         },
-        plusDisabled() {
+        plusDisabled: function () {
             return this.data.disabled || this.data.value >= this.data.max;
         }
     },
     watch: {
-        value(value) {
+        value: function (value) {
             if (value === '') {
                 return;
             }
-            const newValue = this.range(value);
+            var newValue = this.range(value);
             if (typeof newValue === 'number' && +this.data.value !== newValue) {
                 this.set({ value: newValue });
             }
@@ -48,46 +50,46 @@ VantComponent({
     data: {
         focus: false
     },
-    created() {
+    created: function () {
         this.set({
             value: this.range(this.data.value)
         });
     },
     methods: {
-        onFocus(event) {
+        onFocus: function (event) {
             this.$emit('focus', event.detail);
         },
-        onBlur(event) {
-            const value = this.range(this.data.value);
+        onBlur: function (event) {
+            var value = this.range(this.data.value);
             this.triggerInput(value);
             this.$emit('blur', event.detail);
         },
         // limit value range
-        range(value) {
+        range: function (value) {
             value = String(value).replace(/[^0-9.-]/g, '');
             return Math.max(Math.min(this.data.max, value), this.data.min);
         },
-        onInput(event) {
-            const { value = '' } = event.detail || {};
+        onInput: function (event) {
+            var _a = (event.detail || {}).value, value = _a === void 0 ? '' : _a;
             this.triggerInput(value);
         },
-        onChange(type) {
-            if (this.data[`${type}Disabled`]) {
+        onChange: function (type) {
+            if (this.data[type + "Disabled"]) {
                 this.$emit('overlimit', type);
                 return;
             }
-            const diff = type === 'minus' ? -this.data.step : +this.data.step;
-            const value = Math.round((this.data.value + diff) * 100) / 100;
+            var diff = type === 'minus' ? -this.data.step : +this.data.step;
+            var value = Math.round((this.data.value + diff) * 100) / 100;
             this.triggerInput(this.range(value));
             this.$emit(type);
         },
-        onMinus() {
+        onMinus: function () {
             this.onChange('minus');
         },
-        onPlus() {
+        onPlus: function () {
             this.onChange('plus');
         },
-        triggerInput(value) {
+        triggerInput: function (value) {
             this.set({
                 value: this.data.asyncChange ? this.data.value : value
             });

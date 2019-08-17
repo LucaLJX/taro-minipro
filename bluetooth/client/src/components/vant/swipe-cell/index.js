@@ -1,7 +1,9 @@
-import { VantComponent } from '../common/component';
-import { touch } from '../mixins/touch';
-const THRESHOLD = 0.3;
-VantComponent({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var component_1 = require("../common/component");
+var touch_1 = require("../mixins/touch");
+var THRESHOLD = 0.3;
+component_1.VantComponent({
     props: {
         disabled: Boolean,
         leftWidth: {
@@ -14,40 +16,36 @@ VantComponent({
         },
         asyncClose: Boolean
     },
-    mixins: [touch],
+    mixins: [touch_1.touch],
     data: {
         catchMove: false
     },
-    created() {
+    created: function () {
         this.offset = 0;
     },
     methods: {
-        open(position) {
-            const { leftWidth, rightWidth } = this.data;
-            const offset = position === 'left' ? leftWidth : -rightWidth;
+        open: function (position) {
+            var _a = this.data, leftWidth = _a.leftWidth, rightWidth = _a.rightWidth;
+            var offset = position === 'left' ? leftWidth : -rightWidth;
             this.swipeMove(offset);
         },
-        close() {
+        close: function () {
             this.swipeMove(0);
         },
-        swipeMove(offset = 0) {
+        swipeMove: function (offset) {
+            if (offset === void 0) { offset = 0; }
             this.offset = offset;
-            const transform = `translate3d(${offset}px, 0, 0)`;
-            const transition = this.draging
+            var transform = "translate3d(" + offset + "px, 0, 0)";
+            var transition = this.draging
                 ? 'none'
                 : '.6s cubic-bezier(0.18, 0.89, 0.32, 1)';
             this.set({
-                wrapperStyle: `
-        -webkit-transform: ${transform};
-        -webkit-transition: ${transition};
-        transform: ${transform};
-        transition: ${transition};
-      `
+                wrapperStyle: "\n        -webkit-transform: " + transform + ";\n        -webkit-transition: " + transition + ";\n        transform: " + transform + ";\n        transition: " + transition + ";\n      "
             });
         },
-        swipeLeaveTransition() {
-            const { leftWidth, rightWidth } = this.data;
-            const { offset } = this;
+        swipeLeaveTransition: function () {
+            var _a = this.data, leftWidth = _a.leftWidth, rightWidth = _a.rightWidth;
+            var offset = this.offset;
             if (rightWidth > 0 && -offset > rightWidth * THRESHOLD) {
                 this.open('right');
             }
@@ -59,7 +57,7 @@ VantComponent({
             }
             this.set({ catchMove: false });
         },
-        startDrag(event) {
+        startDrag: function (event) {
             if (this.data.disabled) {
                 return;
             }
@@ -68,8 +66,8 @@ VantComponent({
             this.firstDirection = '';
             this.touchStart(event);
         },
-        noop() { },
-        onDrag(event) {
+        noop: function () { },
+        onDrag: function (event) {
             if (this.data.disabled) {
                 return;
             }
@@ -81,29 +79,29 @@ VantComponent({
             if (this.firstDirection === 'vertical') {
                 return;
             }
-            const { leftWidth, rightWidth } = this.data;
-            const offset = this.startOffset + this.deltaX;
+            var _a = this.data, leftWidth = _a.leftWidth, rightWidth = _a.rightWidth;
+            var offset = this.startOffset + this.deltaX;
             if ((rightWidth > 0 && -offset > rightWidth) ||
                 (leftWidth > 0 && offset > leftWidth)) {
                 return;
             }
             this.swipeMove(offset);
         },
-        endDrag() {
+        endDrag: function () {
             if (this.data.disabled) {
                 return;
             }
             this.draging = false;
             this.swipeLeaveTransition();
         },
-        onClick(event) {
-            const { key: position = 'outside' } = event.currentTarget.dataset;
+        onClick: function (event) {
+            var _a = event.currentTarget.dataset.key, position = _a === void 0 ? 'outside' : _a;
             this.$emit('click', position);
             if (!this.offset) {
                 return;
             }
             if (this.data.asyncClose) {
-                this.$emit('close', { position, instance: this });
+                this.$emit('close', { position: position, instance: this });
             }
             else {
                 this.swipeMove(0);

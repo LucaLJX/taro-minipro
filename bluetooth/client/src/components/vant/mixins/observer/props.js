@@ -1,14 +1,20 @@
-export function observeProps(props) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+function observeProps(props) {
     if (!props) {
         return;
     }
-    Object.keys(props).forEach(key => {
-        let prop = props[key];
+    Object.keys(props).forEach(function (key) {
+        var prop = props[key];
         if (prop === null || !('type' in prop)) {
             prop = { type: prop };
         }
-        let { observer } = prop;
-        prop.observer = function (...args) {
+        var observer = prop.observer;
+        prop.observer = function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
             if (observer) {
                 if (typeof observer === 'string') {
                     observer = this[observer];
@@ -20,3 +26,4 @@ export function observeProps(props) {
         props[key] = prop;
     });
 }
+exports.observeProps = observeProps;

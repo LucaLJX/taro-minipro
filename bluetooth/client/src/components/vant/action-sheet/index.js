@@ -1,7 +1,9 @@
-import { VantComponent } from '../common/component';
-import { safeArea } from '../mixins/safe-area';
-VantComponent({
-    mixins: [safeArea()],
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var component_1 = require("../common/component");
+var safe_area_1 = require("../mixins/safe-area");
+component_1.VantComponent({
+    mixins: [safe_area_1.safeArea()],
     props: {
         show: Boolean,
         title: String,
@@ -24,17 +26,17 @@ VantComponent({
         }
     },
     methods: {
-        onSelect(event) {
-            const { index } = event.currentTarget.dataset;
-            const item = this.data.actions[index];
+        onSelect: function (event) {
+            var index = event.currentTarget.dataset.index;
+            var item = this.data.actions[index];
             if (item && !item.disabled && !item.loading) {
                 this.$emit('select', item);
             }
         },
-        onCancel() {
+        onCancel: function () {
             this.$emit('cancel');
         },
-        onClose() {
+        onClose: function () {
             this.$emit('close');
         }
     }

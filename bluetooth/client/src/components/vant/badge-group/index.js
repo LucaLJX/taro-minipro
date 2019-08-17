@@ -1,14 +1,16 @@
-import { VantComponent } from '../common/component';
-VantComponent({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var component_1 = require("../common/component");
+component_1.VantComponent({
     relation: {
         name: 'badge',
         type: 'descendant',
-        linked(target) {
+        linked: function (target) {
             this.badges.push(target);
             this.setActive(this.data.active);
         },
-        unlinked(target) {
-            this.badges = this.badges.filter(item => item !== target);
+        unlinked: function (target) {
+            this.badges = this.badges.filter(function (item) { return item !== target; });
             this.setActive(this.data.active);
         }
     },
@@ -19,18 +21,18 @@ VantComponent({
             observer: 'setActive'
         }
     },
-    beforeCreate() {
+    beforeCreate: function () {
         this.badges = [];
         this.currentActive = -1;
     },
     methods: {
-        setActive(active) {
-            const { badges, currentActive } = this;
+        setActive: function (active) {
+            var _a = this, badges = _a.badges, currentActive = _a.currentActive;
             if (!badges.length) {
                 return Promise.resolve();
             }
             this.currentActive = active;
-            const stack = [];
+            var stack = [];
             if (currentActive !== active && badges[currentActive]) {
                 stack.push(badges[currentActive].setActive(false));
             }

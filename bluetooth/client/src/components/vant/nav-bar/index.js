@@ -1,7 +1,9 @@
-import { VantComponent } from '../common/component';
-import { safeArea } from '../mixins/safe-area';
-VantComponent({
-    mixins: [safeArea({ safeAreaInsetTop: true })],
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var component_1 = require("../common/component");
+var safe_area_1 = require("../mixins/safe-area");
+component_1.VantComponent({
+    mixins: [safe_area_1.safeArea({ safeAreaInsetTop: true })],
     classes: ['title-class'],
     props: {
         title: String,
@@ -19,10 +21,10 @@ VantComponent({
         }
     },
     methods: {
-        onClickLeft() {
+        onClickLeft: function () {
             this.$emit('click-left');
         },
-        onClickRight() {
+        onClickRight: function () {
             this.$emit('click-right');
         }
     }

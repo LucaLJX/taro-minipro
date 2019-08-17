@@ -1,8 +1,10 @@
-import { VantComponent } from '../common/component';
-import { button } from '../mixins/button';
-import { openType } from '../mixins/open-type';
-VantComponent({
-    mixins: [button, openType],
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var component_1 = require("../common/component");
+var button_1 = require("../mixins/button");
+var open_type_1 = require("../mixins/open-type");
+component_1.VantComponent({
+    mixins: [button_1.button, open_type_1.openType],
     props: {
         show: Boolean,
         title: String,
@@ -47,34 +49,35 @@ VantComponent({
         }
     },
     watch: {
-        show(show) {
+        show: function (show) {
             !show && this.stopLoading();
         }
     },
     methods: {
-        onConfirm() {
+        onConfirm: function () {
             this.handleAction('confirm');
         },
-        onCancel() {
+        onCancel: function () {
             this.handleAction('cancel');
         },
-        onClickOverlay() {
+        onClickOverlay: function () {
             this.onClose('overlay');
         },
-        handleAction(action) {
+        handleAction: function (action) {
+            var _a;
             if (this.data.asyncClose) {
-                this.set({
-                    [`loading.${action}`]: true
-                });
+                this.set((_a = {},
+                    _a["loading." + action] = true,
+                    _a));
             }
             this.onClose(action);
         },
-        close() {
+        close: function () {
             this.set({
                 show: false
             });
         },
-        stopLoading() {
+        stopLoading: function () {
             this.set({
                 loading: {
                     confirm: false,
@@ -82,14 +85,14 @@ VantComponent({
                 }
             });
         },
-        onClose(action) {
+        onClose: function (action) {
             if (!this.data.asyncClose) {
                 this.close();
             }
             this.$emit('close', action);
             // 把 dialog 实例传递出去，可以通过 stopLoading() 在外部关闭按钮的 loading
             this.$emit(action, { dialog: this });
-            const callback = this.data[action === 'confirm' ? 'onConfirm' : 'onCancel'];
+            var callback = this.data[action === 'confirm' ? 'onConfirm' : 'onCancel'];
             if (callback) {
                 callback(this);
             }

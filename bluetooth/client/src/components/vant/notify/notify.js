@@ -1,19 +1,21 @@
-import { isObj } from '../common/utils';
-const defaultOptions = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var utils_1 = require("../common/utils");
+var defaultOptions = {
     selector: '#van-notify',
     duration: 3000
 };
 function parseOptions(text) {
-    return isObj(text) ? text : { text };
+    return utils_1.isObj(text) ? text : { text: text };
 }
 function getContext() {
-    const pages = getCurrentPages();
+    var pages = getCurrentPages();
     return pages[pages.length - 1];
 }
-export default function Notify(options) {
+function Notify(options) {
     options = Object.assign({}, defaultOptions, parseOptions(options));
-    const context = options.context || getContext();
-    const notify = context.selectComponent(options.selector);
+    var context = options.context || getContext();
+    var notify = context.selectComponent(options.selector);
     delete options.selector;
     if (notify) {
         notify.set(options);
@@ -23,3 +25,4 @@ export default function Notify(options) {
         console.warn('未找到 van-notify 节点，请确认 selector 及 context 是否正确');
     }
 }
+exports.default = Notify;

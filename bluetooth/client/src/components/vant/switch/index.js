@@ -1,5 +1,7 @@
-import { VantComponent } from '../common/component';
-VantComponent({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var component_1 = require("../common/component");
+component_1.VantComponent({
     field: true,
     classes: ['node-class'],
     props: {
@@ -22,19 +24,19 @@ VantComponent({
         }
     },
     watch: {
-        checked(value) {
-            this.set({ value });
+        checked: function (value) {
+            this.set({ value: value });
         }
     },
-    created() {
+    created: function () {
         this.set({ value: this.data.checked });
     },
     methods: {
-        onClick() {
-            const { activeValue, inactiveValue } = this.data;
+        onClick: function () {
+            var _a = this.data, activeValue = _a.activeValue, inactiveValue = _a.inactiveValue;
             if (!this.data.disabled && !this.data.loading) {
-                const checked = this.data.checked === activeValue;
-                const value = checked ? inactiveValue : activeValue;
+                var checked = this.data.checked === activeValue;
+                var value = checked ? inactiveValue : activeValue;
                 this.$emit('input', value);
                 this.$emit('change', value);
             }

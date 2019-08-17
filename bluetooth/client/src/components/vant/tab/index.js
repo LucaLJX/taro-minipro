@@ -1,5 +1,7 @@
-import { VantComponent } from '../common/component';
-VantComponent({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var component_1 = require("../common/component");
+component_1.VantComponent({
     relation: {
         name: 'tabs',
         type: 'ancestor'
@@ -25,8 +27,8 @@ VantComponent({
         titleStyle: 'update'
     },
     methods: {
-        update() {
-            const parent = this.getRelationNodes('../tabs/index')[0];
+        update: function () {
+            var parent = this.getRelationNodes('../tabs/index')[0];
             if (parent) {
                 parent.updateTabs();
             }

@@ -1,7 +1,9 @@
-export const touch = Behavior({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.touch = Behavior({
     methods: {
-        touchStart(event) {
-            const touch = event.touches[0];
+        touchStart: function (event) {
+            var touch = event.touches[0];
             this.direction = '';
             this.deltaX = 0;
             this.deltaY = 0;
@@ -10,8 +12,8 @@ export const touch = Behavior({
             this.startX = touch.clientX;
             this.startY = touch.clientY;
         },
-        touchMove(event) {
-            const touch = event.touches[0];
+        touchMove: function (event) {
+            var touch = event.touches[0];
             this.deltaX = touch.clientX - this.startX;
             this.deltaY = touch.clientY - this.startY;
             this.offsetX = Math.abs(this.deltaX);

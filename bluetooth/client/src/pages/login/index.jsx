@@ -1,6 +1,11 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import './index.scss'
+import { getOpenId } from '../../service/wx/index'
+import {
+  addWxUser,
+  getWxUser
+} from '../../service/user/index'
 
 const userInfo = {
   cloudID: '',
@@ -40,8 +45,22 @@ export default class Login extends Component {
 
   componentDidHide () { }
 
-  // 获取信息
-  getUserInfo (e) {
+  async getUserInfo (e) {
+    const userInfo = e.detail.userInfo
+    const openId = await getOpenId()
+    const logined = await getWxUser(openId)
+    if (!logined) {
+      const params = {
+        openId: openId,
+        detail: userInfo
+      }
+      await addWxUser(params)
+    }
+    this.toPage()
+  }
+
+  // 获取手机信息
+  getPhoneNum (e) {
     const env = Taro.getEnv()
     // 获取基本信息
     const {
@@ -122,15 +141,24 @@ export default class Login extends Component {
           <Text>将使用微信登陆EASYNC II</Text>
         </View>
         {/* 确认登陆 */}
-        <van-button
+        {/* <van-button
           class='login-button' 
           open-type='getUserInfo'
           type='default'
           onClick={() => this.toPage()}
-          // onGetUserInfo={(e) => this.getUserInfo(e)}
+          // onGetUserinfo={(e) => this.getUserInfo(e)}
         >
           确认登陆
-        </van-button>
+        </van-button> */}
+        <Button
+          class='wx-login-button' 
+          open-type='getUserInfo'
+          type='default'
+          // onClick={() => this.toPage()}
+          onGetUserInfo={(e) => this.getUserInfo(e)}
+        >
+          确认登陆
+        </Button>
         <Text className='cancel-button'>取消</Text>
       </View>
     )

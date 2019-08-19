@@ -52,7 +52,9 @@ export default class Login extends Component {
     if (!logined) {
       const params = {
         openId: openId,
-        detail: userInfo
+        detail: userInfo,
+        connectedCollapse: true,
+        unconnectedCollapse: true
       }
       await addWxUser(params)
     }

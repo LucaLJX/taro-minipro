@@ -30,5 +30,14 @@ exports.main = async (event, content, cb) => {
   const result = (await easync_device.add({
     data: params
   }))
-  return result
+  if (result.errMsg.indexOf('ok') !== -1) {
+    return {
+      code: 0,
+      data: result._id
+    }
+  }
+  return {
+    code: 999,
+    data: null
+  }
 }

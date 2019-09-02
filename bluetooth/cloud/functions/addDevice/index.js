@@ -33,11 +33,13 @@ exports.main = async (event, content, cb) => {
   if (result.errMsg.indexOf('ok') !== -1) {
     return {
       code: 0,
-      data: result._id
+      data: result._id,
+      msg: 'success'
     }
   }
   return {
     code: 999,
-    data: null
+    data: null,
+    msg: 'faild'
   }
 }

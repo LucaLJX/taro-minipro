@@ -15,6 +15,7 @@ exports.main = async (event, content, cb) => {
   if (result.length === 0) {
     return {
       code: 999,
+      data: null,
       msg: '未找到用户'
     }
   }
@@ -22,13 +23,21 @@ exports.main = async (event, content, cb) => {
     connectedCollapse: event.connectedCollapse,
     unconnectedCollapse: event.unconnectedCollapse
   }
-  await wx_user.where({
+  const res = await wx_user.where({
     openId: event.openId
   }).update({
     data: newData
   })
+  if (res.errMsg.indexOf('ok') !== -1) {
+    return {
+      code: 0,
+      data: true,
+      msg: 'success'
+    }
+  }
   return {
-    code: 0,
-    msg: 'success'
+    code: 999,
+    data: false,
+    msg: 'faild'
   }
 }

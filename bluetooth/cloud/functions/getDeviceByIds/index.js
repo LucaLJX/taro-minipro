@@ -12,7 +12,8 @@ exports.main = async (event, content, cb) => {
   if (deviceIds.length === 0) {
     return {
       code: 0,
-      data: []
+      data: [],
+      msg: 'success'
     }
   }
   let list = []
@@ -24,7 +25,8 @@ exports.main = async (event, content, cb) => {
     if (res.errMsg.indexOf('ok') === -1) {
       return {
         code: 999,
-        data: null
+        data: null,
+        msg: 'faild'
       }
     }
     list = list.concat(res.data)
@@ -32,6 +34,7 @@ exports.main = async (event, content, cb) => {
   const result = _.uniqBy(list, 'deviceId')
   return {
     code: 0,
-    data: result
+    data: result,
+    msg: 'success'
   }
 }

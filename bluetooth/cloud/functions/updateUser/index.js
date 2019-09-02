@@ -14,5 +14,16 @@ exports.main = async (event, content, cb) => {
   }).update({
     data: params
   })
-  return result
+  if (result.errMsg.indexOf('ok') !== -1) {
+    return {
+      code: 0,
+      data: true,
+      msg: 'success'
+    }
+  }
+  return {
+    code: 999,
+    data: false,
+    msg: 'faild'
+  }
 }

@@ -11,5 +11,16 @@ exports.main = async (event, content, cb) => {
   const result = await wx_user.add({
     data: params
   })
-  return result
+  if (result.errMsg.indexOf('ok') !== -1) {
+    return {
+      code: 0,
+      _id: result._id,
+      msg: 'success'
+    }
+  }
+  return {
+    code: 999,
+    _id: null,
+    msg: 'faild'
+  }
 }

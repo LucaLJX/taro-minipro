@@ -3,7 +3,7 @@ import { View, Text, Image, Button, ScrollView } from '@tarojs/components'
 import './index.scss'
 import Notify from '../../components/vant/notify/notify'
 import Dialog from '../../components/vant/dialog/dialog'
-import Toast from '../../components/vant/toast/toast'
+import Toast from '../../components/vant/toast/toast';
 import { getOpenId } from '../../service/wx/index'
 import {
   getWxUser,
@@ -23,9 +23,6 @@ import {
   connectDevice,
   getDeviceByIds
 } from '../../service/device'
-import {
-  getEquipmentsByIds
-} from '../../service/equipment'
 
 
 const BlueToothItemVo = {
@@ -106,13 +103,13 @@ export default class Index extends Component {
         })
       }
     }
-    this.initConnectDevices(connectDevices, connectedCollapse, unconnectedCollapse, openId)
+    this.initConnectDevices(connectDevices, connectedCollapse, unconnectedCollapse)
   }
 
-  async initConnectDevices (connectDevices, connectedCollapse, unconnectedCollapse, openId) {
+  async initConnectDevices (connectDevices, connectedCollapse, unconnectedCollapse) {
     let deviceList = []
     if (connectDevices && connectDevices.length !== 0) {
-      deviceList = await getEquipmentsByIds(connectDevices, openId)
+      deviceList = await getDeviceByIds(connectDevices)
     }
     let activeNames = []
     if (connectedCollapse) {
@@ -192,7 +189,7 @@ export default class Index extends Component {
     let list = []
     for (let i = 0; i < devices.length; i++) {
       const node = devices[i]
-      if (node.name.indexOf('EASYNC') !== -1) {
+      if (node.name.indexOf('EASYNC') === -1) {
         const connectItem = _.find(this.state.connectedList, connectItem => connectItem.deviceId === node.deviceId)
         list.push({
           device: node,
@@ -293,14 +290,11 @@ export default class Index extends Component {
     }
   }
 
-  toPage (item, connected = false) {
-    const openId = this.state.openId
-    const { deviceId } = item
-    const params = `?deviceId=${deviceId}&connected=${connected}&openId=${openId}`
+  toPage () {
     const env = Taro.getEnv()
     if (env === Taro.ENV_TYPE.WEAPP) {
       Taro.navigateTo({
-        url: '/pages/setting/index' + params,
+        url: '/pages/setting/index',
       })
     }
   }
@@ -367,13 +361,12 @@ export default class Index extends Component {
           <View className='add'>
             <Text className='add-button' onClick={() => this.showDialog()}>  + 添加设备</Text>
             {
-              (this.state.connectedList.length !== 0 ||
-              this.state.onLineList.length !== 0) &&
+              this.state.connectedList.length !== 0 ||
+              this.state.onLineList.length !== 0 &&
               <Text className='add-button' onClick={() => this.changeEle()}>一键同步</Text>
             }
             {
-              (this.state.connectedList.length !== 0 ||
-                this.state.onLineList.length !== 0) &&
+              this.state.onLineList.length !== 0 &&
               <Text className='add-button' onClick={() => console.log('批量设置')}>批量设置  </Text>
             }
           </View>
@@ -388,12 +381,15 @@ export default class Index extends Component {
         }
         {/* 列表不为空的时候展示折叠框 */}
         {
-          (this.state.unConnectedList.length !== 0 || this.state.onLineList.length !== 0 || this.state.connectedList.length !== 0) && <View>
+          (this.state.unConnectedList.length !== 0 || this.state.onLineList.length !== 0 || this.state.connectedList.length !== 0) &&
+          <van-collapse value={this.state.activeNames}
+          onChange={(e) => this.changeCollapse(e)}>
+            <van-collapse-item title='已连接' name='connected'>
               {/* 已连接列表 - begin */}
               {
                 this.state.connectedList.map((item, i) => {
                   return (
-                    <View key={'item' + i} className='device' onClick={() => this.toPage(item, true)}>
+                    <View key={'item' + i} className='device' onClick={() => this.toPage()}>
                       {/* 图片 */}
                       <View className='device-left'>
                         <View className='left-img'>
@@ -448,11 +444,13 @@ export default class Index extends Component {
                 })
               }
               {/* 已连接列表 - end */}
+            </van-collapse-item>
+            <van-collapse-item title='未连接' name='unconnected'>
               {/* 未连接列表 - begin */}
               {
                 this.state.unConnectedList.map((item, i) => {
                   return (
-                    <View key={'item' + i} className='device unlink' onClick={() => this.toPage(item, false)}>
+                    <View key={'item' + i} className='device unlink'>
                       <View className='unlink-model'></View>
                       {/* 图片 */}
                       <View className='device-left'>
@@ -466,7 +464,7 @@ export default class Index extends Component {
                         </View>
                       </View>
                       <View className='device-middle'>
-                        <Text className='name'>{ item.name }</Text>
+                        <Text className='name'>A机</Text>
                         <Text className='time'>--:--:--:--</Text>
                       </View>
                       {/* 电量展示 */}
@@ -508,7 +506,8 @@ export default class Index extends Component {
                 })
               }
               {/* 未连接列表 - end */}
-          </View>
+            </van-collapse-item>
+          </van-collapse>
         }
 
         {/* 轻提示 */}

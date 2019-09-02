@@ -55,7 +55,8 @@
   height: 154rpx;
   width: 710rpx;
   // 若不用折叠框，则左margin为0
-  margin: 28rpx auto 0 -10rpx;
+  margin: 28rpx auto 0 auto;
+  // margin: 28rpx auto 0 -10rpx;
   border-radius: 8rpx;
   box-shadow: 0rpx 0rpx 4rpx #aaa;
   display: flex;

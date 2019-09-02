@@ -2,15 +2,44 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Image, Button, Switch, Picker } from '@tarojs/components'
 import './index.scss'
 import dayjs from 'dayjs'
+import _ from 'lodash'
 import {
   getFpsList,
   getModelList,
   getBitsList
 } from '../../service/deviceConfig'
+import {
+  getBLEDeviceServices,
+  getBLEDeviceCharacteristics,
+  readBLECharacteristicValue,
+  onBLECharacteristicValueChange,
+  notifyBLECharacteristicValueChange
+} from '../../utils/bluetooth/index'
+import {
+  getEquipment,
+  updateEquipment
+} from '../../service/equipment'
+import Toast from '../../components/vant/toast/toast'
+import {
+  readLtc
+} from '../../utils/write'
+
+const serviceId = '0783B03E-8535-B5A0-7140-A304D2495CB9'
+
+const KEY = '8535'
 
 export default class Index extends Component {
 
   state = {
+    device: null,
+    params: null,
+    serviceList: [],
+    serviceId: '',
+    characteristicNotifyId: '',
+    characteristicWriteId: '',
+    // 设备信息
+    deviceId: '',
+    connected: false,
     timeModalVisible: false,
     switchChecked: false,
     speed: 55,
@@ -29,8 +58,8 @@ export default class Index extends Component {
     userChecked: '',
     showUser: false,
     // rec
-    phoneValue: 'phoneValue',
-    rtcValue: '',
+    phoneValue: '',
+    rtcValue: '设备未连接',
     showRtc: false,
     selector: ['美国', '中国', '巴西', '日本'],
     selectorChecked: '美国',
@@ -46,7 +75,8 @@ export default class Index extends Component {
       'van-switch': '../../components/vant/switch/index',
       'van-icon': '../../components/vant/icon/index',
       'van-slider': '../../components/vant/slider/index',
-      'van-field': '../../components/vant/field/index'
+      'van-field': '../../components/vant/field/index',
+      'van-toast': '../../components/vant/toast/index'
     },
   }
 
@@ -56,9 +86,9 @@ export default class Index extends Component {
       getModelList(),
       getBitsList()
     ])
-    const fpsList = result[0].data
+    const fpsList = result[0]
     const modelList = result[1]
-    const bitsList = result[2].data
+    const bitsList = result[2]
     const deviceSelector = [
       {
         values: modelList,
@@ -77,7 +107,49 @@ export default class Index extends Component {
     })
   }
 
-  componentDidMount () { }
+  async componentDidMount () {
+    const { deviceId, connected, openId } = this.$router.params
+    this.setState({
+      deviceId: deviceId,
+      connected: connected,
+      openId: openId
+    }, () => {
+      if (connected && deviceId) {
+        this.getserviceId(deviceId)
+      }
+    })
+    // if (connected && deviceId) {
+    //   // 获取连接的蓝牙设备所有的服务
+    //   const res = await getBLEDeviceServices(deviceId)
+    //   if (res.code === 0) {
+    //     const services = res.data
+    //     const uuidItem = _.find(services, item => item.uuid.indexOf(KEY) !== -1)
+    //     this.setState({
+    //       serviceId: uuidItem.uuid,
+    //     })
+    //     // 获取特征值的uuid
+    //     const valueRes = await getBLEDeviceCharacteristics(deviceId, uuidItem.uuid)
+    //     if (valueRes.code === 0) {
+    //       const characteristics = valueRes.characteristics
+    //       const characteristicsItem = _.find(characteristics, item => {
+    //         return item.properties.notify &&
+    //         item.properties.write &&
+    //         item.properties.read
+    //       })
+    //       if (characteristicsItem) {
+    //         this.setState({
+    //           characteristicId: characteristicsItem.uuid
+    //         })
+    //       }
+    //     }
+    //   }
+    // }
+    const result = await getEquipment(deviceId, openId)
+    this.setState({
+      device: result[0] || null,
+      params: result[0] || null
+    })
+  }
 
   componentWillUnmount () { }
 
@@ -85,11 +157,121 @@ export default class Index extends Component {
 
   componentDidHide () { }
 
+  // 获取蓝牙服务的id
+  async getserviceId (deviceId) {
+    // 获取连接的蓝牙设备所有的服务
+    const res = await getBLEDeviceServices(deviceId)
+    if (res.code === 0) {
+      const services = res.data
+      const uuidItem = _.find(services, item => item.uuid.indexOf(KEY) !== -1)
+      this.setState({
+        serviceId: uuidItem.uuid
+      }, () => {
+        this.getCharacteristicId()
+      })
+    }
+  }
+
+  async getCharacteristicId () {
+    const { deviceId, serviceId } = this.state
+    // 获取特征值的uuid
+    const valueRes = await getBLEDeviceCharacteristics(deviceId, serviceId)
+    if (valueRes.code === 0) {
+      const characteristics = valueRes.data
+      const notifyItem = _.find(characteristics, item => {
+        return item.properties.notify &&
+        !item.properties.write &&
+        !item.properties.read
+      })
+      const writeItem = _.find(characteristics, item => {
+        return !item.properties.notify &&
+        item.properties.write &&
+        !item.properties.read
+      })
+      if (writeItem && notifyItem) {
+        this.setState({
+          characteristicNotifyId: notifyItem.uuid,
+          characteristicWriteId: writeItem.uuid
+        }, () => {
+          this.readDevice()
+        })
+      }
+    }
+  }
+
+  async readDevice () {
+    const { deviceId, serviceId, characteristicNotifyId, characteristicWriteId } = this.state
+    const result = await notifyBLECharacteristicValueChange(deviceId, serviceId, characteristicNotifyId)
+    await readLtc(deviceId, serviceId, characteristicWriteId)
+    // setTimeout(async () => {
+    //   await onBLECharacteristicValueChange()
+    // }, 5000)
+    await onBLECharacteristicValueChange()
+    // setTimeout(async () => {
+    //   console.log('开始监听变化了  111')
+    //   await onBLECharacteristicValueChange()
+    // }, 2000)
+    // await readBLECharacteristicValue(deviceId, serviceId, characteristicId)
+    // setTimeout(async () => {
+    //   console.log('开始写变化了')
+    //   await readLtc(deviceId, serviceId, characteristicId)
+    // }, 5000)
+    
+    // setTimeout(async () => {
+    //   console.log('开始监听变化了   22222')
+    //   await onBLECharacteristicValueChange()
+    // }, 10000)
+
+    // await readLtc(deviceId, serviceId, characteristicId)
+    
+    // Taro.notifyBLECharacteristicValueChange({
+    //   deviceId: deviceId,
+    //   serviceId: serviceId,
+    //   characteristicId: characteristicId,
+    //   state: true,
+    //   complete: (res) => {
+    //     console.log('Taro notifyBLECharacteristicValueChange complete')
+    //     setTimeout(() => {
+    //       readLtc(deviceId, serviceId, characteristicId)
+    //     }, 5000)
+    //     console.log(res)
+    //     Taro.onBLECharacteristicValueChange((res) => {
+    //       console.log('Taro onBLECharacteristicValueChange')
+    //       console.log(res)
+    //     })
+    //   }
+    // })
+
+  }
+
   clickTime () {
     this.setState({
       timeModalVisible: true
     })
   }
+
+  // 修改名称 (防抖)
+  changeName = _.debounce(async (e) => {
+    const newName = e.detail
+    const params = {
+      name: newName,
+      openId: this.state.openId,
+      deviceId: this.state.deviceId
+    }
+    const res = await updateEquipment(params)
+    if (!res) {
+      Toast.fail('修改名称失败')
+      this.setState({
+        params: this.state.device
+      })
+    } else {
+      const device = this.state.device
+      device.name = newName
+      this.setState({
+        device: device
+      })
+    }
+  }, 1000)
 
   // 帧率相关
   showFps () {
@@ -172,18 +354,34 @@ export default class Index extends Component {
   // rtc
   showRtcClick () {
     const phoneValue = dayjs().format('YYYY-MM-DD HH:mm:ss')
+    this.timer = setInterval(() => {
+      this.getPhoneTime()
+    }, 1000)
     this.setState({
       phoneValue: phoneValue,
       showRtc: true
     })
   }
 
+  // 获取当前时间
+  getPhoneTime () {
+    const phoneValue = dayjs().format('YYYY-MM-DD HH:mm:ss')
+    this.setState({
+      phoneValue: phoneValue
+    })
+  }
+
   closeDialog () {
     this.setState({
-      phoneValue: '',
-      rtcValue: '',
       showRtc: false
     })
+    clearInterval(this.timer)
+    setTimeout(() => {
+      this.setState({
+        phoneValue: '',
+        rtcValue: '设备未连接'
+      })
+    }, 100)
   }
 
   // 跳转到固件页面
@@ -242,11 +440,15 @@ export default class Index extends Component {
         {/* 名称 */}
         <View>
           <van-field
-            value={'A机'}
+            value={this.state.params.name}
             label='名称'
             input-align='right'
-            placeholder=''
-            readonly
+            placeholder='名称'
+            onChange={(e) => this.changeName(e)}
+            // onChange={(name) => {
+            //   console.log('change name ')
+            //   console.log(name)
+            // }}
           />
         </View>
         {/* 帧率  vant */}
@@ -342,7 +544,7 @@ export default class Index extends Component {
             input-align='right'
             readonly
           />
-          <van-switch class='switch' size='20px' checked={this.switchChecked} onChange={(e) => this.setState({
+          <van-switch class='switch' size='16px' checked={this.switchChecked} onChange={(e) => this.setState({
               switchChecked: e.detail
             })} />
         </View>
@@ -370,6 +572,9 @@ export default class Index extends Component {
         </View>
         {/* 删除按钮 */}
         <van-button class='del-button' type='danger'>删除设备</van-button>
+
+        {/* 轻提示 */}
+        <van-toast id='van-toast' />
 
         {/* rtc弹窗 */}
         <van-dialog

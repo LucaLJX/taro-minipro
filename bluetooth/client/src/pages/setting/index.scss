@@ -185,3 +185,12 @@
     color: #ff9800;
   }
 }
+
+#van-toast {
+  .toast-index--van-toast__container {
+    z-index: 9015!important;
+  }
+  .overlay-index--van-overlay {
+    z-index: 9000!important;
+  }
+}

@@ -19,12 +19,14 @@ export default class Login extends Component {
   getLogin = () => {
     Taro.cloud
       .callFunction({
-        name: "login",
-        data: {}
+        name: "getEquipment",
+        data: {
+          
+        }
       })
       .then(res => {
         this.setState({
-          context: res.result
+          context: res
         })
       })
   }

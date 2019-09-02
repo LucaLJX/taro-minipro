@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro'
 import { getWxUser, updateUser } from '../user'
 import { addConnectLog } from '../log'
+import { getEquipment, addEquipment, updateEquipment } from '../equipment'
 import _ from 'lodash'
 import dayjs from 'dayjs'
 
@@ -51,10 +52,12 @@ export const connectDevice =  async (params) => {
     const { deviceId } = device
     const result = await Promise.all([
       getDeviceByIds([deviceId]),
-      getWxUser(openId)
+      getWxUser(openId),
+      getEquipment(deviceId, openId)
     ])
     const deviceList = result[0]
     let user = result[1]
+    const equipment = result[2]
     // 判断设备表
     if (deviceList.length === 0) {
       addDevice(device)
@@ -67,11 +70,23 @@ export const connectDevice =  async (params) => {
       }
       updateUser(user)
     }
+    // 没有关联用户的设备
+    if (equipment.length === 0) {
+      addEquipment({
+        name: device.name || '',
+        deviceId: deviceId,
+        openId: openId,
+        createTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
+      })
+    }
     // 添加连接日志
     const connectParams = {
       deviceId: deviceId,
       openId: openId,
-      connectTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
+      connectTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      connectType: 'connect',
+      oldValue: '',
+      newValue: ''
     }
     addConnectLog(connectParams)
     resolve({
@@ -80,3 +95,21 @@ export const connectDevice =  async (params) => {
     })
   })
 }
+
+/**
+ * 获取用户已连接的设备
+ */
+
+export const getConnectedDevices =  async (openId) => {
+  return new Promise(async (resolve, reject) => {
+    const user = await getWxUser(openId)
+    if (user && user.connectDevices) {
+      const deviceIds = user.connectDevices
+      const deviceList = await getDeviceByIds(deviceIds)
+      resolve(deviceList)
+    }
+    resolve([])
+  })
+}
+
+

@@ -11,7 +11,7 @@ export const addConnectLog = (params) => {
       name: 'addConnectLog',
       data: params
     }).then(res => {
-      if (res.result.code === 0) {
+      if (res.result && res.result.code === 0) {
         // 添加成功
         resolve(res.result._id)
       }

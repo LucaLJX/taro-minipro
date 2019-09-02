@@ -9,7 +9,11 @@ export const addWxUser = (params) => {
       name: 'addUser',
       data: params
     }).then(res => {
-      resolve(res.result)
+      if (res.result.code === 0) {
+        // 添加成功
+        resolve(res.result.data)
+      }
+      reject('addUser err')
     })
   })
 }
@@ -25,8 +29,11 @@ export const getWxUser = (params) => {
         openId: params
       }
     }).then(res => {
-      if (res.result && res.result.data.length !== 0) {
-        resolve(res.result.data[0])
+      if (res.result && res.result.code === 0) {
+        if (res.result.data && res.result.data.length !== 0) {
+          resolve(res.result.data[0])
+        }
+        resolve(null)
       }
       reject('getUser err')
     })
@@ -42,7 +49,7 @@ export const updateUser = (params) => {
       name: 'updateUser',
       data: params
     }).then(res => {
-      if (res.result && res.result.errMsg.indexOf('ok') !== -1) {
+      if (res.result && res.result.code === 0) {
         resolve(true)
       }
       reject('updateUser err')

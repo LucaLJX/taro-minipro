@@ -8,7 +8,10 @@ export const getFpsList = () => {
     Taro.cloud.callFunction({
       name: 'getFpsList'
     }).then(res => {
-      resolve(res.result)
+      if (res.result && res.result.code === 0) {
+        resolve(res.result.data)
+      }
+      reject('getFpsList err')
     })
   })
 }
@@ -21,7 +24,10 @@ export const getModelList = (params) => {
     Taro.cloud.callFunction({
       name: 'getModelList'
     }).then(res => {
-      resolve(res.result)
+      if (res.result && res.result.code === 0) {
+        resolve(res.result.data)
+      }
+      reject('getModelList err')
     })
   })
 }
@@ -34,7 +40,10 @@ export const getBitsList = (params) => {
     Taro.cloud.callFunction({
       name: 'getBitsList'
     }).then(res => {
-      resolve(res.result)
+      if (res.result && res.result.code === 0) {
+        resolve(res.result.data)
+      }
+      reject('getBitsList err')
     })
   })
 }

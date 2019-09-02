@@ -54,7 +54,8 @@ export default class Login extends Component {
         openId: openId,
         detail: userInfo,
         connectedCollapse: true,
-        unconnectedCollapse: true
+        unconnectedCollapse: true,
+        connectDevices: []
       }
       await addWxUser(params)
     }
